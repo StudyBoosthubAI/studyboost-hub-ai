@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta name="google-site-verification" content="_bs0savOaR3RLWEK9ZzJLf_C-4tCa734tZ85WeVHZsk" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>StudyBoost Hub AI</title>
+
+<link rel="stylesheet" href="style.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="favicon.png">
+</head>
+
+<body>
+    
+<header>
+
+<nav class="navbar">
+
+<div class="logo">
+    <img src="logo.png" alt="StudyBoost Hub AI Logo">
+    <h1>StudyBoost Hub AI</h1>
+</div>
+</div>
+
+<ul class="nav-links">
+
+<li><a href="#">Home</a></li>
+
+<li><a href="#">Features</a></li>
+
+<li><a href="#">About</a></li>
+
+<li><a href="#">Contact</a></li>
+
+<li><div id="userArea">
+
+<button id="loginBtn">Login</button>
+<button id="themeToggle">🌙 Dark Mode</button>
+
+<span id="welcomeUser" style="display:none;"></span>
+
+<button id="logoutBtn" style="display:none;">Logout</button>
+
+</div></li>
+
+</ul>
+
+</nav>
+
+</header>
+<div id="guestBanner">
+
+    👋 Welcome Guest
+
+    <br><br>
+
+    🤖 AI Questions Left:
+    <span id="guestAI">3</span>
+
+    |
+
+    📝 Notes Left:
+    <span id="guestNotes">2</span>
+
+    |
+
+    🧠 Quiz Left:
+    <span id="guestQuiz">1</span>
+
+</div>
+<div id="guestCard">
+
+<h2>🚀 Unlock StudyBoost Hub AI</h2>
+
+<p>
+Login to enjoy unlimited AI Questions,
+Notes Generator, Quiz Generator,
+Dashboard and Progress Tracking.
+</p>
+
+<button id="guestLoginBtn">
+🔐 Login for Unlimited Access
+</button>
+
+</div>
+<div id="landingPage">
+<section class="hero">
+
+<div class="hero-content">
+
+<h1>🚀 Study Smarter with AI</h1>
+
+<p>
+Your personal AI study assistant to solve doubts,
+generate notes and practice quizzes anytime.
+</p>
+
+<div class="hero-buttons">
+
+<button class="hero-btn" id="getStartedBtn">
+🎯 Get Started
+</button>
+
+<button class="hero-btn secondary-btn" id="exploreBtn">
+✨ Explore Features
+</button>
+
+</div>
+<div class="hero-stats">
+
+<div class="hero-stat">
+<h2>1k+</h2>
+<p>Students</p>
+</div>
+
+<div class="hero-stat">
+<h2>50K+</h2>
+<p>Questions Solved</p>
+</div>
+
+<div class="hero-stat">
+<h2>100+</h2>
+<p>Study Topics</p>
+</div>
+
+</div>
+</div>
+
+</section>
+</div>
+<section id="appHome" style="display:none;">
+
+<div class="app-header">
+<div class="logo">
+    <img src="transparent-logo.png" alt="StudyBoost Hub AI">
+    <h1>StudyBoost Hub AI</h1>
+</div>
+
+<p>Select any feature below</p>
+
+</div>
+
+<div class="app-grid">
+
+<div class="app-card" id="goAI">
+
+🤖
+
+<h3>AI Doubt Solver</h3>
+
+</div>
+
+<div class="app-card" id="goNotes">
+
+📝
+
+<h3>AI Notes</h3>
+
+</div>
+
+<div class="app-card" id="goQuiz">
+
+🧠
+
+<h3>AI Quiz</h3>
+
+</div>
+
+<div class="app-card" id="goPlanner">
+
+📅
+
+<h3>Study Planner</h3>
+
+</div>
+
+</div>
+
+<div class="app-buttons">
+
+<button id="appLogin">
+
+🔐 Login / Signup
+
+</button>
+
+<button id="backLanding">
+
+⬅ Back
+
+</button>
+
+</div>
+
+</section>
+
+<!-- FEATURES SECTION -->
+
+<section class="features">
+
+<h2>Our Features</h2>
+
+<div class="feature-container">
+
+<div class="card">
+<h3>🤖 AI Doubt Solver</h3>
+<p>Ask any study question and get instant answers.</p>
+</div>
+
+<div class="card">
+<h3>📝 Notes Generator</h3>
+<p>Create smart notes for your exams.</p>
+</div>
+
+<div class="card">
+<h3>📚 Quiz Practice</h3>
+<p>Practice unlimited quizzes with AI.</p>
+</div>
+
+</div>
+
+</section>
+
+<!-- ABOUT SECTION -->
+
+<section class="about">
+
+<h2>About StudyBoost Hub AI</h2>
+
+<p>
+
+StudyBoost Hub AI is your smart learning platform designed to help students study faster and better using Artificial Intelligence.
+
+You can solve doubts, generate notes, practice quizzes, and track your study progress—all in one place.
+
+</p>
+
+</section>
+<!-- CONTACT SECTION -->
+
+<section class="contact">
+
+<h2>Contact Us</h2>
+
+<form class="contact-form">
+
+<input type="text" placeholder="Your Name" required>
+
+<input type="email" placeholder="Your Email" required>
+
+<textarea placeholder="Your Message" rows="5" required></textarea>
+
+<button type="submit">Send Message</button>
+
+</form>
+
+</section>
+
+<!-- ================= STUDENT DASHBOARD ================= -->
+
+<section id="dashboard" class="dashboard">
+
+<h2>📊 Student Dashboard</h2>
+<div class="profile-card">
+
+<h3 id="profileName">
+👋 Welcome
+</h3>
+
+<p>
+🟢 Status :
+<span id="profileStatus">Logged In</span>
+</p>
+
+<p>
+⭐ Member :
+<span id="memberType">Free Student</span>
+</p>
+
+<p>
+🔥 Daily Streak :
+<span id="streakCount">1 Day</span>
+</p>
+
+<p>
+📅 Last Login :
+<span id="lastLogin">Today</span>
+</p>
+
+</div>
+
+<div class="dashboard-card">
+
+<h3 id="dashboardName">👋 Welcome Student</h3>
+
+<p>Keep learning every day and improve your skills.</p>
+
+</div>
+<div class="stats-container">
+
+    <div class="stat-card">
+        <h3 id="questionsCount">0</h3>
+        <p>🤖 Questions Asked</p>
+    </div>
+
+    <div class="stat-card">
+        <h3>1</h3>
+        <p>🔥 Daily Streak</p>
+    </div>
+
+    <div class="stat-card">
+        <h3>Beginner</h3>
+        <p>⭐ Study Level</p>
+    </div>
+
+</div>
+<div class="progress-box">
+
+<h3>📈 Study Progress</h3>
+
+<div class="progress-bar">
+
+<div id="progressFill"></div>
+
+</div>
+
+<p id="progressText">0%</p>
+
+</div>
+<div class="achievement-box">
+
+<h3>🏆 Achievements</h3>
+
+<div id="achievementBadge">
+
+🔒 No Achievement Yet
+
+</div>
+
+</div>
+<div class="xp-box">
+
+    <h3>⭐ Your Level</h3>
+
+    <div id="userLevel">Beginner</div>
+
+    <p id="xpText">XP : 0</p>
+
+</div>
+<div class="activity-box">
+
+    <h3>📝 Recent Activity</h3>
+
+    <p><strong>Last Question:</strong></p>
+
+    <p id="lastQuestion">
+        No question asked yet.
+    </p>
+
+    <p><strong>Status:</strong></p>
+
+    <p id="activityStatus">
+        ⏳ Waiting...
+    </p>
+
+</div>
+<div class="goal-box">
+
+    <h3>🎯 Today's Study Goal</h3>
+
+    <p id="goalProgress">0 / 10 Questions Completed</p>
+
+    <div class="goal-bar">
+
+        <div id="goalFill"></div>
+
+    </div>
+
+</div>
+<div class="reset-box">
+
+    <button id="resetDashboard">
+        🔄 Reset Dashboard
+    </button>
+
+</div>
+</section>
+<!-- ================= AI DOUBT SOLVER ================= -->
+
+<section id="ai-section" class="ai-section">
+
+<h2>🤖 AI Doubt Solver</h2>
+
+<p>Ask any study question and get an instant answer.</p>
+
+<div class="ai-box">
+
+<textarea
+id="questionInput"
+placeholder="Type your question here..."
+rows="5"></textarea>
+
+<button id="askAI">
+Ask AI 🚀
+</button>
+
+<div class="ai-badge">
+🟢 Powered by Groq AI
+</div>
+
+<div id="aiAnswer">
+
+Your AI answer will appear here...
+
+</div>
+<button id="copyAnswer" style="display:none;">
+📋 Copy Answer
+</button>
+<button id="clearAnswer">
+🗑️ Clear Answer
+</button>
+</div>
+
+</section>
+
+<!-- ================= AI NOTES GENERATOR ================= -->
+
+<section id="notes-section" class="notes-section">
+
+<h2>📝 AI Notes Generator</h2>
+
+<p>Enter any topic and generate quick study notes.</p>
+
+<input
+type="text"
+id="notesTopic"
+placeholder="Enter Topic (Example: Photosynthesis)"
+>
+
+<br><br>
+
+<button id="generateNotes">
+📚 Generate Notes
+</button>
+<div class="ai-badge">
+🟢 Powered by Groq AI
+</div>
+<div id="notesResult">
+
+Your notes will appear here...
+
+</div>
+<div class="notes-history">
+
+    <h3>📚 Recent Notes</h3>
+
+    <ul id="historyList">
+
+        <li>No recent topics</li>
+
+    </ul>
+
+</div>
+<div class="notes-counter">
+
+    <h3>📊 Notes Generated</h3>
+
+    <p id="notesCount">0</p>
+
+</div>
+<button id="copyNotes" style="display:none;">
+📋 Copy Notes
+</button>
+<button id="clearNotes" style="display:none;">
+🗑️ Clear Notes
+</button>
+<button id="downloadNotes" style="display:none;">
+⬇️ Download Notes
+</button>
+
+</section>
+<!-- ================= QUIZ GENERATOR ================= -->
+
+<section id="quiz-section" class="quiz-section">
+
+<h2>🧠 AI Quiz Generator</h2>
+
+<p>Enter any topic and generate a quick quiz.</p>
+
+<input
+type="text"
+id="quizTopic"
+placeholder="Enter Topic (Example: HTML)"
+>
+
+<br><br>
+
+<button id="generateQuiz">
+
+📝 Generate Quiz
+
+</button>
+<div class="ai-badge">
+🟢 Powered by Groq AI
+</div>
+<div id="quizResult">
+
+Your quiz will appear here...
+
+</div>
+<div class="quiz-counter">
+
+    <h3>📊 Quiz Attempts</h3>
+
+    <p id="quizCount">0</p>
+
+</div>
+<div class="quiz-score">
+
+    <h3>🏆 Quiz Score</h3>
+
+    <p id="quizScore">0</p>
+
+</div>
+<div class="quiz-history">
+
+    <h3>📜 Recent Quizzes</h3>
+
+    <ul id="quizHistoryList">
+
+        <li>No quizzes yet</li>
+
+    </ul>
+
+</div>
+<button id="checkQuiz" style="display:none;">
+✅ Check Answer
+</button>
+<button id="copyQuiz" style="display:none;">
+📋 Copy Quiz
+</button>
+<button id="clearQuiz" style="display:none;">
+🗑️ Clear Quiz
+</button>
+
+</section>
+<!-- ================= STUDY PLANNER ================= -->
+
+<section id="planner-section" class="planner-section">
+
+<h2>📅 Study Planner</h2>
+<p id="plannerDate"></p>
+<p>Create your daily study plan.</p>
+
+<input
+type="text"
+id="plannerTask"
+placeholder="Enter Study Task"
+>
+<input type="date" id="studyDate">
+<br><br>
+<button id="addTask">
+➕ Add Task
+</button>
+<button id="savePlan">
+💾 Save Plan
+</button>
+<br><br>
+<p id="progressPercent">
+📊 Progress: 0%
+</p>
+
+<input type="date" id="plannerTaskDate">
+
+<br><br>
+
+<input type="time" id="plannerTaskTime">
+
+<br><br>
+
+<ul id="plannerList">
+
+</ul>
+
+</section>
+<!-- ================= AI STUDY PLANNER ================= -->
+
+<section class="planner-ai-section">
+
+<h2>🤖 AI Study Planner</h2>
+
+<p>Create a complete study plan using AI.</p>
+
+<input
+type="text"
+id="plannerPrompt"
+placeholder="Example: Complete Biology in 7 days">
+
+<br><br>
+
+<button id="generatePlanner">
+📅 Generate AI Plan
+</button>
+
+<div class="ai-badge">
+🟢 Powered by Groq AI
+</div>
+
+<div id="plannerResult">
+
+Your AI Study Plan will appear here...
+
+</div>
+<br><br>
+
+<button id="copyPlanner" style="display:none;">
+📋 Copy Plan
+</button>
+
+<button id="clearPlanner" style="display:none;">
+🗑 Clear Plan
+</button>
+
+</section>
+<!-- ================= STUDENT MODE ================= -->
+
+<section id="studentMode">
+
+<h2>🎓 Student Dashboard</h2>
+
+<p>
+
+Welcome back!
+
+More student-only features will appear here after login.
+
+</p>
+
+</section>
+<!-- FOOTER -->
+
+<footer class="footer">
+
+<h2>StudyBoost Hub AI</h2>
+
+<p>Learn Smarter. Score Better. 🚀</p>
+
+<p>© 2026 StudyBoost Hub AI. All Rights Reserved.</p>
+
+</footer>
+<!-- Login Modal -->
+
+<div class="modal" id="loginModal">
+
+  <div class="modal-content">
+
+    <span class="close" id="closeModal">&times;</span>
+
+    <h2>Welcome Back 👋</h2>
+    <input type="text" id="signupName" placeholder="Full Name" style="display:none;">
+
+    <input type="email" id="loginEmail" placeholder="Enter Email">
+
+    <input type="password" id="loginPassword" placeholder="Enter Password">
+
+    <button id="loginSubmit">Login</button>
+
+    <p>Don't have an account?
+      <a href="#" id="openSignup">Sign Up</a>
+    </p>
+
+  </div>
+
+</div>
+<script src="config.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>
