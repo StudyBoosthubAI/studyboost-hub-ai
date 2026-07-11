@@ -159,6 +159,8 @@ content: question
     });
 
     const data = await response.json();
+    console.log(data);
+alert(JSON.stringify(data));
     return data.choices[0].message.content;
     console.log(data);
     alert(JSON.stringify(data));
