@@ -233,9 +233,11 @@ askAI.addEventListener("click", async function () {
         clearBtn.style.display = "inline-block";
         return;
 
-    } catch (error) {
-        console.log(error);
     }
+    catch (error) {
+    alert("ERROR: " + error.message);
+    console.log(error);
+}
 
     // Offline / Hardcoded Fallback system agar live api response na mile
     aiAnswer.innerHTML = `
@@ -520,9 +522,11 @@ generateNotes.addEventListener("click", async function(){
         downloadNotes.style.display = "inline-block";
         return;
 
-    } catch (error) {
-        console.log(error);
-    }
+    } 
+    catch (error) {
+    alert("ERROR: " + error.message);
+    console.log(error);
+}
 
     // Offline hardcoded Notes logic 
     if(topic.includes("html")){
@@ -615,7 +619,6 @@ if(savedHistory.length > 0){
         historyList.innerHTML += "<li>📖 " + item + "</li>";
     });
 }
-
 // Notes Counter
 let totalNotes = localStorage.getItem("totalNotes") || 0;
 notesCount.innerText = totalNotes;
@@ -679,9 +682,11 @@ generateQuiz.addEventListener("click", async function(){
         clearQuiz.style.display = "inline-block";
         return;
 
-    } catch (error) {
-        console.log(error);
-    }
+    } 
+    catch (error) {
+    alert("ERROR: " + error.message);
+    console.log(error);
+}
 });
 
 // Check Quiz Score Event
