@@ -1,3 +1,5 @@
+const plannerAlarm = new Audio("alarm.mp3");
+plannerAlarm.preload = "auto";
 const loginBtn = document.getElementById("loginBtn");
 const loginModal = document.getElementById("loginModal");
 const closeModal = document.getElementById("closeModal");
@@ -122,6 +124,7 @@ questionInput.addEventListener("keypress", function(e){
     if(e.key === "Enter"){
         e.preventDefault();
         askAI.click();
+    const plannerAlarm = new Audio("alarm.mp3");
     }
 });
 
@@ -140,7 +143,7 @@ async function askGroq(question) {
     });
 
     const data = await response.json();
-    console.log(data);
+    ;
 
     if (!response.ok) {
         throw new Error(data.error || "No response");
@@ -351,7 +354,6 @@ function updateAchievement(){
     }
 }
 updateAchievement();
-
 // XP System Logic
 const userLevel = document.getElementById("userLevel");
 const xpText = document.getElementById("xpText");
@@ -521,7 +523,6 @@ copyNotes.addEventListener("click", function(){
     navigator.clipboard.writeText(notesResult.innerText);
     alert("✅ Notes Copied Successfully!");
 });
-
 // Clear Notes Logic
 clearNotes.addEventListener("click", function(){
     notesTopic.value = "";
@@ -737,10 +738,15 @@ if(getStartedBtn){
         document.querySelector(".about").style.display = "none";
         document.querySelector(".contact").style.display = "none";
         document.getElementById("ai-section").style.display = "block";
+        document.getElementById("vision-section").style.display = "block";
         document.getElementById("notes-section").style.display = "block";
         document.getElementById("quiz-section").style.display = "block";
         document.getElementById("planner-section").style.display = "block";
-        document.querySelector(".planner-ai-section").style.display = "block";
+const aiPlanner = document.getElementById("planner-ai-section");
+
+if (aiPlanner) {
+    aiPlanner.style.display = "block";
+}
         window.scrollTo(0,0);
     });
 }
@@ -771,6 +777,11 @@ document.getElementById("goQuiz")?.addEventListener("click", function () {
 document.getElementById("goPlanner")?.addEventListener("click", function () {
     document.querySelector(".planner-ai-section").scrollIntoView({ behavior: "smooth" });
 });
+document.getElementById("goAIPlanner")?.addEventListener("click", function () {
+    document.getElementById("planner-ai-section").scrollIntoView({
+        behavior: "smooth"
+    });
+});
 document.getElementById("appLogin")?.addEventListener("click", function () {
     if (typeof loginModal !== 'undefined') {
         loginModal.style.display = "flex";
@@ -782,26 +793,91 @@ const plannerTask = document.getElementById("plannerTask");
 const addTask = document.getElementById("addTask");
 const progressPercent = document.getElementById("progressPercent");
 const plannerList = document.getElementById("plannerList");
+// ===============================
+// PLANNER MANAGER
+// ===============================
 
-let tasks = JSON.parse(localStorage.getItem("studyPlanner")) || [];
+let tasks = [];
 
-function showTasks(){
+function loadTasks() {
+
+    const saved =
+        localStorage.getItem("studyPlanner");
+
+    if (saved) {
+
+        tasks = JSON.parse(saved);
+
+    } else {
+
+        tasks = [];
+
+    }
+
+}
+
+function saveTasks() {
+
+    localStorage.setItem(
+        "studyPlanner",
+        JSON.stringify(tasks)
+    );
+
+}
+function getRemainingTime(task){
+
+    const now = new Date();
+
+    const alarm = new Date(task.date + "T" + task.time);
+
+    const diff = alarm - now;
+
+    if(diff <= 0){
+        return "🔔 Time Passed";
+    }
+
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+    if(hours > 0){
+        return `⏳ ${hours}h ${mins}m left`;
+    }
+
+    return `⏳ ${mins}m left`;
+}
+function renderTasks(){
     plannerList.innerHTML = "";
     tasks.forEach(function(task,index){
         plannerList.innerHTML += `
-        <li>
-            ${task}
-            <button onclick="completeTask(${index})">✅</button>
-            <button onclick="deleteTask(${index})">🗑</button>
-        </li>
-        `;
+<li class="${task.completed ? "taskDone" : ""}">
+   <strong class="${
+    task.completed ? "completedTask" : ""
+}">
+    ${task.text}
+</strong> <br>
+    📅 ${task.date} &nbsp; ⏰ ${task.time}
+    <br>
+🔔 ${
+    task.notified
+        ? "Completed"
+        : "Active"
+}
+<br>
+${getRemainingTime(task)}
+<br>
+    🔁 ${task.repeat}
+    <br><br>
+    <button onclick="completeTask(${index})">✅</button>
+    <button onclick="deleteTask(${index})">🗑</button>
+</li>
+`;
     });
 
     let completed = 0;
     tasks.forEach(function(task){
-        if(task.startsWith("✅")){
-            completed++;
-        }
+        if(task.completed){
+    completed++;
+}
     });
 
     let percent = 0;
@@ -810,40 +886,51 @@ function showTasks(){
     }
     progressPercent.innerText = "📊 Progress : " + percent + "%";
 }
-showTasks();
+loadTasks();
+renderTasks();
 
 // Add Task
 if (addTask) {
     addTask.addEventListener("click", function(){
         const task = plannerTask.value.trim();
-        const taskDate = document.getElementById("plannerTaskDate").value;
+        const taskDate = document.getElementById("taskDate").value;
         const taskTime = document.getElementById("plannerTaskTime").value;
 
         if(task === ""){
             alert("⚠️ Please enter a study task.");
             return;
         }
-
-        tasks.push(task + " 📅 " + taskDate + " ⏰ " + taskTime);
+tasks.push({
+    text: task,
+    date: taskDate,
+    time: taskTime,
+    repeat: document.getElementById("repeatTask").value,
+    completed: false,
+    notified: false
+});
+        
         if(taskTime !== ""){
             alert("🔔 Reminder Set For : " + taskTime);
         }
         localStorage.setItem("studyPlanner", JSON.stringify(tasks));
         plannerTask.value = "";
-        showTasks();
+        renderTasks();
     });
 }
-
 function completeTask(index){
-    tasks[index] = "✅ " + tasks[index];
-    localStorage.setItem("studyPlanner", JSON.stringify(tasks));
-    showTasks();
+
+    tasks[index].completed = !tasks[index].completed;
+
+    saveTasks(tasks);
+
+    renderTasks();
+
 }
 
 function deleteTask(index){
     tasks.splice(index,1);
     localStorage.setItem("studyPlanner", JSON.stringify(tasks));
-    showTasks();
+    renderTasks();
 }
 
 const plannerDate = document.getElementById("plannerDate");
@@ -918,3 +1005,407 @@ if (backLanding) {
         });
     });
 }
+// ================= AI VISION STUDIO =================
+
+const VISION_API =
+"https://studyboost-vision.mauryaarpit2406.workers.dev/";
+
+let currentVisionPrompt =
+"Describe this image in detail.";
+
+let selectedVisionImage = null;
+
+// Elements
+
+const visionCameraBtn =
+document.getElementById("visionCameraBtn");
+
+const visionGalleryBtn =
+document.getElementById("visionGalleryBtn");
+
+const visionImage =
+document.getElementById("visionImage");
+
+const visionPreview =
+document.getElementById("visionPreview");
+
+const visionActions =
+document.getElementById("visionActions");
+
+const visionHeading =
+document.getElementById("visionHeading");
+
+const visionResult =
+document.getElementById("visionResult");
+
+// ================= Camera =================
+
+visionCameraBtn.addEventListener("click", () => {
+
+    visionImage.setAttribute(
+        "capture",
+        "environment"
+    );
+
+    visionImage.click();
+
+});
+
+// ================= Gallery =================
+
+visionGalleryBtn.addEventListener("click", () => {
+
+    visionImage.removeAttribute("capture");
+
+    visionImage.click();
+
+});
+// ================= AI BUTTONS =================
+
+// 🧠 Solve Doubt
+
+document.getElementById("visionSolve").addEventListener("click", () => {
+
+    currentVisionPrompt = `
+You are StudyBoost Hub AI.
+
+Read the question from the image carefully.
+
+Rules:
+- Do NOT describe the image.
+- Solve the question directly.
+- Explain in simple student-friendly language.
+- Use headings and bullet points.
+- End with a memory trick.
+`;
+
+    if (selectedVisionImage) {
+        sendVisionRequest();
+    } else {
+        visionImage.click();
+    }
+
+});
+
+// 📝 Generate Notes
+
+document.getElementById("visionGenerateNotes").addEventListener("click", () => {
+
+    currentVisionPrompt = `
+Read the study material from this image.
+
+Generate:
+- Beautiful notes
+- Headings
+- Bullet points
+- Important keywords
+- Easy explanation
+- Quick revision summary
+`;
+
+    if (selectedVisionImage) {
+        sendVisionRequest();
+    } else {
+        visionImage.click();
+    }
+
+});
+
+// 📚 Generate Project
+
+document.getElementById("visionGenerateProject").addEventListener("click", () => {
+
+    currentVisionPrompt = `
+Read the topic from the image.
+
+Generate a complete school project.
+
+Include:
+- Title
+- Introduction
+- Objectives
+- Explanation
+- Conclusion
+- Viva Questions
+`;
+
+    if (selectedVisionImage) {
+        sendVisionRequest();
+    } else {
+        visionImage.click();
+    }
+
+});
+
+// 📊 Generate Chart
+
+document.getElementById("visionGenerateChart").addEventListener("click", () => {
+
+    currentVisionPrompt = `
+Read the data/topic from the image.
+
+Create a clean chart from the information.
+
+Rules:
+- Do NOT describe the image.
+- Do NOT explain the topic.
+- Return ONLY a Markdown table.
+- Use proper columns and rows.
+- Keep the table neat and easy to read.
+`;
+
+
+
+    if (selectedVisionImage) {
+        sendVisionRequest();
+    } else {
+        visionImage.click();
+    }
+
+});
+
+// ❓ Generate Quiz
+
+document.getElementById("visionGenerateQuiz").addEventListener("click", () => {
+
+    currentVisionPrompt = `
+Read the image carefully.
+Generate a student-friendly quiz.
+
+Rules:
+
+- Create 5 MCQs.
+- Each question should have 4 options.
+- Put every option on a NEW LINE.
+
+Example:
+
+1. What is Orbit?
+
+A. Option One
+
+B. Option Two
+
+C. Option Three
+
+D. Option Four
+
+✅ Correct Answer: B
+
+Repeat the same format for all questions.
+
+Do NOT keep options in one line.
+Use proper spacing between questions.
+`;
+
+    if (selectedVisionImage) {
+        sendVisionRequest();
+    } else {
+        visionImage.click();
+    }
+
+});
+// ================= IMAGE UPLOAD =================
+
+visionImage.addEventListener("change", function () {
+
+    const file = this.files[0];
+
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+
+        selectedVisionImage = e.target.result;
+
+        visionActions.style.display = "grid";
+        visionHeading.style.display = "block";
+        visionResult.style.display = "block";
+
+        visionPreview.innerHTML = `
+            <img
+                src="${selectedVisionImage}"
+                style="
+                    width:100%;
+                    max-height:300px;
+                    object-fit:cover;
+                    border-radius:12px;
+                ">
+        `;
+
+        sendVisionRequest();
+
+    };
+
+    reader.readAsDataURL(file);
+
+});
+
+// ================= SEND REQUEST =================
+
+function sendVisionRequest() {
+
+    if (!selectedVisionImage) return;
+
+    visionResult.innerHTML = "🤖 AI is analyzing image...";
+
+    fetch(VISION_API, {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+
+            prompt: currentVisionPrompt,
+
+            image: selectedVisionImage
+
+        })
+
+    })
+
+    .then(res => res.json())
+
+    .then(data => {
+
+        console.log(data);
+
+        if (data.error) {
+
+            visionResult.innerHTML =
+            "❌ " + data.error;
+
+            return;
+
+        }
+
+        const answer =
+        data.choices?.[0]?.message?.content ||
+        "❌ No response received.";
+
+        visionResult.innerHTML =
+        marked.parse(answer);
+
+    })
+
+    .catch(err => {
+
+        console.log(err);
+
+        visionResult.innerHTML =
+        "❌ Vision Failed";
+
+    });
+
+}
+// ================= GO TO VISION =================
+
+document.getElementById("goVision")?.addEventListener("click", () => {
+
+    document.getElementById("vision-section").scrollIntoView({
+
+        behavior: "smooth"
+
+    });
+
+});
+
+// ================= RESET IMAGE =================
+
+function resetVision() {
+
+    selectedVisionImage = null;
+
+    visionImage.value = "";
+
+}
+
+// ================= READY =================
+
+console.log("✅ StudyBoost Hub AI Vision v2 Loaded");
+// ===============================
+// STUDY PLANNER NOTIFICATION
+// ===============================
+
+if ("Notification" in window) {
+
+    if (Notification.permission !== "granted") {
+
+        Notification.requestPermission().then(permission => {
+
+            console.log("Notification Permission:", permission);
+
+        });
+
+    }
+}
+document.getElementById("testAlarm")?.addEventListener("click", () => {
+
+    alert("🔔 Alarm System Ready!");
+    
+
+});
+
+// ================= REAL ALARM ENGINE =================
+
+setInterval(function () {
+
+    const now = new Date();
+
+    const currentDate = now.toISOString().split("T")[0];
+
+    const currentTime =
+        String(now.getHours()).padStart(2, "0") +
+        ":" +
+        String(now.getMinutes()).padStart(2, "0");
+
+    tasks.forEach(function (task, index) {
+
+        if (task.completed) return;
+
+        if (task.notified) return;
+
+       if (
+    task.date === currentDate &&
+    task.time === currentTime
+) {
+console.log("Alarm Triggered");   plannerAlarm.pause();
+
+plannerAlarm.currentTime = 0;
+console.log(task.date, currentDate);
+console.log(task.time, currentTime);
+plannerAlarm.play().then(() => {
+    console.log("✅ Alarm Playing");
+}).catch((err) => {
+    console.log("❌ Alarm Error :", err);
+});
+
+            if (navigator.vibrate) {
+                navigator.vibrate([500,300,500]);
+            }
+
+            alert(
+                "🔔 Study Reminder!\n\n" +
+                task.text
+            );
+
+            task.notified = true;
+saveTasks(tasks);
+        }
+
+    });
+
+}, 1000);
+// ===============================
+// LIVE PLANNER REFRESH
+// ===============================
+
+setInterval(function(){
+
+    renderTasks();
+
+},60000);

@@ -190,7 +190,20 @@ generate notes and practice quizzes anytime.
 <h3>Study Planner</h3>
 
 </div>
+<div class="app-card" id="goVision">
 
+📷
+
+<h3>AI Vision Studio</h3>
+
+</div>
+<div class="app-card" id="goAIPlanner">
+
+🤖📅
+
+<h3>AI Study Planner</h3>
+
+</div>
 </div>
 
 <div class="app-buttons">
@@ -210,7 +223,6 @@ generate notes and practice quizzes anytime.
 </div>
 
 </section>
-
 <!-- FEATURES SECTION -->
 
 <section class="features">
@@ -439,7 +451,7 @@ Your AI answer will appear here...
 </div>
 
 </section>
-
+g
 <!-- ================= AI NOTES GENERATOR ================= -->
 
 <section id="notes-section" class="notes-section">
@@ -572,37 +584,52 @@ Your quiz will appear here...
 <input
 type="text"
 id="plannerTask"
-placeholder="Enter Study Task"
->
-<input type="date" id="studyDate">
+placeholder="Enter Study Task">
+<div class="planner-field">
+
+    <label for="taskDate">📅 Select Date</label>
+
+    <input type="date" id="taskDate">
+
+</div>
+
+<div class="planner-field">
+
+    <label for="plannerTaskTime">⏰ Select Time</label>
+
+    <input type="time" id="plannerTaskTime">
+
+</div>
+
+<div class="planner-field">
+
+    <label for="repeatTask">🔁 Repeat</label>
+
+    <select id="repeatTask">
+        <option value="once">One Time</option>
+        <option value="daily">Daily</option>
+        <option value="weekly">Weekly</option>
+        <option value="monthly">Monthly</option>
+    </select>
+
+</div>
 <br><br>
+<button id="testAlarm">
+🔔 Test Alarm
+</button>
 <button id="addTask">
 ➕ Add Task
-</button>
-<button id="savePlan">
-💾 Save Plan
 </button>
 <br><br>
 <p id="progressPercent">
 📊 Progress: 0%
 </p>
-
-<input type="date" id="plannerTaskDate">
-
-<br><br>
-
-<input type="time" id="plannerTaskTime">
-
-<br><br>
-
 <ul id="plannerList">
 
 </ul>
-
 </section>
 <!-- ================= AI STUDY PLANNER ================= -->
-
-<section class="planner-ai-section">
+<section id="planner-ai-section" class="planner-ai-section">
 
 <h2>🤖 AI Study Planner</h2>
 
@@ -639,6 +666,39 @@ Your AI Study Plan will appear here...
 </button>
 
 </section>
+<!-- ================= AI VISION STUDIO SECTION ================= -->
+<section id="vision-section" class="vision-section">
+    <div class="vision-container">
+        <h2>📷 AI Vision Studio</h2>
+        <p>Upload or take a picture of your study material.</p>
+        
+        <!-- Chhupa hua File Input -->
+        <input type="file" id="visionImage" accept="image/*" style="display: none;">
+        
+        <div class="vision-btn-group">
+            <button id="visionCameraBtn" class="vision-btn camera-btn">📸 Use Camera</button>
+            <button id="visionGalleryBtn" class="vision-btn gallery-btn">🖼️ Choose Gallery</button>
+        </div>
+
+        <div id="visionPreview" class="preview-box"></div>
+
+        <!-- Heading added as per Image 2 -->
+        <h3 id="visionActionHeading" style="display: none; text-align: left; margin: 20px 0 10px 0; font-weight: bold;">🤖 What do you want AI to do?</h3>
+
+        <!-- Fixed Layout: Grid se hata kar Full-width blocks kiya list jaisa -->
+        <div id="visionActions" style="display: none; flex-direction: column; gap: 12px; margin-top: 15px;">
+            <div class="vision-action-card" id="visionSolve">🧠 Solve Doubt</div>
+            <div class="vision-action-card" id="visionGenerateNotes">📝 Generate Notes</div>
+            <div class="vision-action-card" id="visionGenerateProject">📚 Generate Project</div>
+            <div class="vision-action-card" id="visionGenerateChart">📊 Generate Chart</div>
+            <div class="vision-action-card" id="visionGenerateQuiz">❓ Generate Quiz</div>
+        </div>
+
+        <h3 id="visionHeading" style="display: none; margin-top: 20px;">🤖 AI Response:</h3>
+        <div id="visionResult" style="display: none; padding: 15px; background: #f4f4f4; border-radius: 8px;"></div>
+    </div>
+</section>
+
 <!-- ================= STUDENT MODE ================= -->
 
 <section id="studentMode">
@@ -689,8 +749,9 @@ More student-only features will appear here after login.
   </div>
 
 </div>
+
 <script src="config.js"></script>
 <script src="script.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </body>
 </html>
