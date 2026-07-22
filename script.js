@@ -1,18 +1,23 @@
 const plannerAlarm = new Audio("alarm.mp3");
 plannerAlarm.preload = "auto";
+
 const loginBtn = document.getElementById("loginBtn");
 const loginModal = document.getElementById("loginModal");
 const closeModal = document.getElementById("closeModal");
 
 // Modal open karne ke liye
-loginBtn.onclick = function () {
-    loginModal.style.display = "flex";
-};
+if (loginBtn) {
+    loginBtn.onclick = function () {
+        loginModal.style.display = "flex";
+    };
+}
 
 // Close button se modal band karne ke liye
-closeModal.onclick = function () {
-    loginModal.style.display = "none";
-};
+if (closeModal) {
+    closeModal.onclick = function () {
+        loginModal.style.display = "none";
+    };
+}
 
 // Modal ke bahar click karne par band karne ke liye
 window.onclick = function (e) {
@@ -26,55 +31,62 @@ const signupName = document.getElementById("signupName");
 let signupMode = false;
 
 // Signup aur Login mode toggler
-openSignup.onclick = function(e){
-    e.preventDefault();
-    signupMode = !signupMode;
-    if(signupMode){
-        signupName.style.display = "block";
-        document.getElementById("loginSubmit").innerText = "Create Account";
-        openSignup.innerText = "Login";
-    }else{
-        signupName.style.display = "none";
-        document.getElementById("loginSubmit").innerText = "Login";
-        openSignup.innerText = "Sign Up";
-    }
-};
+if (openSignup) {
+    openSignup.onclick = function(e){
+        e.preventDefault();
+        signupMode = !signupMode;
+        if(signupMode){
+            signupName.style.display = "block";
+            document.getElementById("loginSubmit").innerText = "Create Account";
+            openSignup.innerText = "Login";
+        }else{
+            signupName.style.display = "none";
+            document.getElementById("loginSubmit").innerText = "Login";
+            openSignup.innerText = "Sign Up";
+        }
+    };
+}
 
 const loginSubmit = document.getElementById("loginSubmit");
 
-// Signup Handler
-loginSubmit.addEventListener("click", function () {
-    if (signupMode) {
-        const user = {
-            name: signupName.value,
-            email: loginEmail.value,
-            password: loginPassword.value
-        };
-        localStorage.setItem("studyboostUser", JSON.stringify(user));
-        alert("✅ Account Created Successfully!");
-    }
-});
-
-// Login Handler
-loginSubmit.addEventListener("click", function () {
-    if (!signupMode) {
-        const user = JSON.parse(localStorage.getItem("studyboostUser"));
-        if (
-            user &&
-            user.email === loginEmail.value &&
-            user.password === loginPassword.value
-        ) {
-            alert("🎉 Login Successful!");
-            isLoggedIn = true;
-            localStorage.setItem("isLoggedIn", "true");
-            currentUser = user.name;
-            loginModal.style.display = "none";
-            updateUserUI();
-        } else {
-            alert("❌ Invalid Email or Password");
+if (loginSubmit) {
+    // Signup Handler
+    loginSubmit.addEventListener("click", function () {
+        if (signupMode) {
+            const user = {
+                name: signupName.value,
+                email: document.getElementById("loginEmail")?.value || "",
+                password: document.getElementById("loginPassword")?.value || ""
+            };
+            localStorage.setItem("studyboostUser", JSON.stringify(user));
+            alert("✅ Account Created Successfully!");
         }
-    }
-});
+    });
+
+    // Login Handler
+    loginSubmit.addEventListener("click", function () {
+        if (!signupMode) {
+            const loginEmail = document.getElementById("loginEmail");
+            const loginPassword = document.getElementById("loginPassword");
+            const user = JSON.parse(localStorage.getItem("studyboostUser"));
+            if (
+                user &&
+                loginEmail && loginPassword &&
+                user.email === loginEmail.value &&
+                user.password === loginPassword.value
+            ) {
+                alert("🎉 Login Successful!");
+                isLoggedIn = true;
+                localStorage.setItem("isLoggedIn", "true");
+                currentUser = user.name;
+                loginModal.style.display = "none";
+                updateUserUI();
+            } else {
+                alert("❌ Invalid Email or Password");
+            }
+        }
+    });
+}
 
 // User UI update karne ka function
 function updateUserUI() {
@@ -86,51 +98,54 @@ function updateUserUI() {
     const logoutBtn = document.getElementById("logoutBtn");
 
     if (user && loggedIn) {
-        loginBtn.style.display = "none";
-        appLogin.style.display = "none";
-        welcomeUser.style.display = "inline-block";
-        welcomeUser.innerText = "👋 " + user.name;
-        logoutBtn.style.display = "inline-block";
-        document.getElementById("guestBanner").style.display = "none";
-        document.getElementById("guestCard").style.display = "none";
-        document.getElementById("studentMode").style.display = "block";
+        if (loginBtn) loginBtn.style.display = "none";
+        if (appLogin) appLogin.style.display = "none";
+        if (welcomeUser) {
+            welcomeUser.style.display = "inline-block";
+            welcomeUser.innerText = "👋 " + user.name;
+        }
+        if (logoutBtn) logoutBtn.style.display = "inline-block";
+        if (document.getElementById("guestBanner")) document.getElementById("guestBanner").style.display = "none";
+        if (document.getElementById("guestCard")) document.getElementById("guestCard").style.display = "none";
+        if (document.getElementById("studentMode")) document.getElementById("studentMode").style.display = "block";
     } else {
-        loginBtn.style.display = "inline-block";
-        appLogin.style.display = "inline-block";
-        welcomeUser.style.display = "none";
-        welcomeUser.innerText = "";
-        logoutBtn.style.display = "none";
-        document.getElementById("guestBanner").style.display = "block";
-        document.getElementById("guestCard").style.display = "block";
-        document.getElementById("studentMode").style.display = "none";
+        if (loginBtn) loginBtn.style.display = "inline-block";
+        if (appLogin) appLogin.style.display = "inline-block";
+        if (welcomeUser) {
+            welcomeUser.style.display = "none";
+            welcomeUser.innerText = "";
+        }
+        if (logoutBtn) logoutBtn.style.display = "none";
+        if (document.getElementById("guestBanner")) document.getElementById("guestBanner").style.display = "block";
+        if (document.getElementById("guestCard")) document.getElementById("guestCard").style.display = "block";
+        if (document.getElementById("studentMode")) document.getElementById("studentMode").style.display = "none";
     }
 }
 
-// Page load hone par UI update karein
 updateUserUI();
 
 const logoutBtn = document.getElementById("logoutBtn");
-logoutBtn.onclick = function () {
-    localStorage.setItem("isLoggedIn", "false");
-    alert("👋 Logged Out Successfully!");
-    location.reload();
-};
+if (logoutBtn) {
+    logoutBtn.onclick = function () {
+        localStorage.setItem("isLoggedIn", "false");
+        alert("👋 Logged Out Successfully!");
+        location.reload();
+    };
+}
 
 const askAI = document.getElementById("askAI");
 const questionInput = document.getElementById("questionInput");
 
-// Enter key press event handler input box ke liye
-questionInput.addEventListener("keypress", function(e){
-    if(e.key === "Enter"){
-        e.preventDefault();
-        askAI.click();
-    const plannerAlarm = new Audio("alarm.mp3");
-    }
-});
-
+if (questionInput) {
+    questionInput.addEventListener("keypress", function(e){
+        if(e.key === "Enter"){
+            e.preventDefault();
+            if (askAI) askAI.click();
+        }
+    });
+}
 const aiAnswer = document.getElementById("aiAnswer");
 
-// Groq API Wrapper Function (Fixed & Linked to Cloudflare Backend)
 async function askGroq(question) {
     const response = await fetch("https://studyboost-api.mauryaarpit2406.workers.dev", {
         method: "POST",
@@ -138,12 +153,28 @@ async function askGroq(question) {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            question: question
+            question: `
+Answer this question in PREMIUM StudyBoost Hub AI format.
+
+Rules:
+- Use simple English.
+- Use short paragraphs.
+- Use proper headings.
+- Make important words bold using **bold**.
+- Underline important terms using <u>underline</u>.
+- Use bullet points.
+- Never write huge paragraphs.
+- Keep the answer mobile friendly.
+- Add emojis only in headings.
+- Explain like a premium study app.
+
+Question:
+${question}
+`
         })
     });
 
     const data = await response.json();
-    ;
 
     if (!response.ok) {
         throw new Error(data.error || "No response");
@@ -152,7 +183,6 @@ async function askGroq(question) {
     return data.answer;
 }
 
-// Notes Generator Prompt Function
 async function askGroqNotes(topic) {
     return await askGroq(
         "Create well-structured study notes on the topic: " +
@@ -161,168 +191,127 @@ async function askGroqNotes(topic) {
     );
 }
 
-// Quiz Generator Prompt Function
-async function askGroqQuiz(topic) {
-    return await askGroq(
-        "Create a quiz on the topic: " +
-        topic +
-        ". Generate exactly 10 multiple-choice questions. Each question must have 4 options (A, B, C, D). After every question, write the correct answer in this format: ✅ Answer: A. Use simple English."
-    );
-}
+if (askAI) {
+    askAI.addEventListener("click", async function () {
+        const loggedIn = localStorage.getItem("isLoggedIn") === "true";
 
-askAI.addEventListener("click", async function () {
-    const loggedIn = localStorage.getItem("isLoggedIn") === "true";
+        if (!loggedIn) {
+            if (guestAI <= 0) {
+                alert("🔒 Please Login for Unlimited AI Questions.");
+                loginModal.style.display = "flex";
+                return;
+            }
+            guestAI--;
+            document.getElementById("guestAI").innerText = guestAI;
+        }
 
-    if (!loggedIn) {
-        if (guestAI <= 0) {
-            alert("🔒 Please Login for Unlimited AI Questions.");
-            loginModal.style.display = "flex";
+        const question = questionInput.value.trim().toLowerCase();
+        localStorage.setItem("lastQuestion", question);
+
+        updateRecentActivity(question);
+        updateGoal();
+        totalQuestions++;
+        localStorage.setItem("totalQuestions", totalQuestions);
+        if (questionsCount) questionsCount.innerText = totalQuestions;
+        updateProgress();
+        updateAchievement();
+        updateXP();
+
+        if (question === "") {
+            aiAnswer.innerHTML = `
+<div class="premium-ai-answer">
+<div class="ai-title">⚠️ Empty Question</div>
+<div class="ai-divider"></div>
+<div class="ai-content">Please enter your question first.</div>
+</div>`;
             return;
         }
-        guestAI--;
-        document.getElementById("guestAI").innerText = guestAI;
-    }
 
-    const question = questionInput.value.trim().toLowerCase();
-    localStorage.setItem("lastQuestion", question);
+        aiAnswer.innerHTML = `
+        <div class="ai-thinking">
+        🤖 Thinking...
+        <div class="ai-dot"></div>
+        <div class="ai-dot"></div>
+        <div class="ai-dot"></div>
+        </div>`;
 
-    updateRecentActivity(question);
-    updateGoal();
-    totalQuestions++;
-    localStorage.setItem("totalQuestions", totalQuestions);
-    questionsCount.innerText = totalQuestions;
-    updateProgress();
-    updateAchievement();
-    updateXP();
+        try {
+            const answer = await askGroq(question);
 
-    if (question === "") {
-        aiAnswer.innerHTML = "⚠️ Please enter your question.";
-        return;
-    }
+            aiAnswer.innerHTML = `
+<div class="premium-ai-answer">
+<div class="ai-title">🤖 AI Response</div>
+<div class="ai-divider"></div>
+<div class="ai-content">
+${answer
+.replace(/^### (.*)$/gm,"<h3>$1</h3>")
+.replace(/^## (.*)$/gm,"<h2>$1</h2>")
+.replace(/^# (.*)$/gm,"<h1>$1</h1>")
+.replace(/\*\*(.*?)\*\*/g,"<b>$1</b>")
+.replace(/\*(.*?)\*/g,"<i>$1</i>")
+.replace(/^- (.*)$/gm,"• $1")
+.replace(/\n/g,"<br>")
+}
+</div>
+<div class="ai-divider"></div>
+<div class="ai-footer">
+<span>⚡ Powered by Groq AI</span>
+<span>🎓 StudyBoost Hub AI</span>
+</div>
+</div>`;
+            if (copyBtn) copyBtn.style.display = "inline-block";
+            if (clearBtn) clearBtn.style.display = "inline-block";
+            return;
+        }
+        catch (error) {
+            alert("ERROR: " + error.message);
+            console.log(error);
+        }
+    });
+}
 
-    aiAnswer.innerHTML = `
-    <div class="ai-thinking">
-    🤖 Thinking...
-    <div class="ai-dot"></div>
-    <div class="ai-dot"></div>
-    <div class="ai-dot"></div>
-    </div>
-    `;
-
-    try {
-        const answer = await askGroq(question);
-        aiAnswer.innerHTML = answer;
-        copyBtn.style.display = "inline-block";
-        clearBtn.style.display = "inline-block";
-        return;
-    }
-    catch (error) {
-        alert("ERROR: " + error.message);
-        console.log(error);
-    }
-
-    // Offline Fallback System (Runs only if backend completely fails)
-    aiAnswer.innerHTML = `
-    <div class="ai-loading">
-    🤖 AI is thinking...
-    <div class="loading-dots">
-    <span>.</span><span>.</span><span>.</span>
-    </div>
-    </div>
-    `;
-    copyBtn.style.display = "none";
-
-    setTimeout(() => {
-        if (question.includes("newton")) {
-            aiAnswer.innerHTML = "<b>Newton's Second Law</b><br><br>Force = Mass × Acceleration (F = ma).";
-        }
-        else if (question.includes("photosynthesis")) {
-            aiAnswer.innerHTML = "<b>Photosynthesis</b><br><br>Plants use sunlight, water and carbon dioxide to prepare food and release oxygen.";
-        }
-        else if (question.includes("python")) {
-            aiAnswer.innerHTML = "<b>Python</b><br><br>Python is a simple and powerful programming language used for AI, Web Development and Automation.";
-        }
-        else if (question.includes("html")) {
-            aiAnswer.innerHTML = "<b>HTML</b><br><br>HTML is used to create the structure of web pages.";
-        }
-        else if (question.includes("css")) {
-            aiAnswer.innerHTML = "<b>CSS</b><br><br>CSS is used to design and style web pages.";
-        }
-        else if (question.includes("javascript")) {
-            aiAnswer.innerHTML = "<b>JavaScript</b><br><br>JavaScript makes websites interactive and dynamic.";
-        }
-        else if (question.includes("gravity")) {
-            aiAnswer.innerHTML = "<b>Gravity</b><br><br>Gravity is the force that attracts objects toward the Earth.";
-        }
-        else if (
-            question === "ai" ||
-            question === "what is ai" ||
-            question === "explain ai" ||
-            question.includes("artificial intelligence")
-        ) {
-            aiAnswer.innerHTML = "<b>Artificial Intelligence</b><br><br>Artificial Intelligence (AI) is a technology that enables computers to learn, solve problems and make decisions like humans.";
-        }
-        else if (question.includes("math")) {
-            aiAnswer.innerHTML = "<b>Mathematics</b><br><br>Mathematics is the study of numbers, shapes and patterns.";
-        }
-        else if (question.includes("chemistry")) {
-            aiAnswer.innerHTML = "<b>Chemistry</b><br><br>Chemistry is the study of matter, atoms, molecules and chemical reactions.";
-        }
-        else if (question.includes("biology")) {
-            aiAnswer.innerHTML = "<b>Biology</b><br><br>Biology is the scientific study of living organisms.";
-        }
-        else {
-            aiAnswer.innerHTML = "🤖 Sorry! I don't know this answer yet.<br><br>When we connect Gemini AI later, I'll answer almost any study question.";
-        }
-        aiAnswer.classList.add("answer-show");
-        copyBtn.style.display = "inline-block";
-        clearBtn.style.display = "inline-block";
-    }, 1500);
-});
-
-// Copy AI Answer Logic
 const copyBtn = document.getElementById("copyAnswer");
 const clearBtn = document.getElementById("clearAnswer");
 
-copyBtn.addEventListener("click", function () {
-    const answer = aiAnswer.innerText;
-    if(answer.trim() === ""){
-        alert("⚠️ No answer to copy.");
-        return;
-    }
-    navigator.clipboard.writeText(answer);
-    alert("✅ Answer copied successfully!");
-});
+if (copyBtn) {
+    copyBtn.addEventListener("click", function () {
+        const answer = aiAnswer.innerText;
+        if(answer.trim() === ""){
+            alert("⚠️ No answer to copy.");
+            return;
+        }
+        navigator.clipboard.writeText(answer);
+        alert("✅ Answer copied successfully!");
+    });
+}
 
-// Clear AI Answer Logic
-clearBtn.addEventListener("click", function(){
-    aiAnswer.innerHTML = "Your AI answer will appear here...";
-    copyBtn.style.display = "none";
-    clearBtn.style.display = "none";
-    questionInput.value = "";
-});
+if (clearBtn) {
+    clearBtn.addEventListener("click", function(){
+        aiAnswer.innerHTML = "Your AI answer will appear here...";
+        copyBtn.style.display = "none";
+        clearBtn.style.display = "none";
+        if (questionInput) questionInput.value = "";
+    });
+}
 
-// Dashboard Init
 const dashboardName = document.getElementById("dashboardName");
 const user = JSON.parse(localStorage.getItem("studyboostUser"));
 const loggedIn = localStorage.getItem("isLoggedIn") === "true";
 
 if(user && loggedIn){
-    dashboardName.innerText = "👋 Welcome, " + user.name;
-    document.getElementById("profileName").innerText = "👋 Welcome, " + user.name;
+    if (dashboardName) dashboardName.innerText = "👋 Welcome, " + user.name;
+    if (document.getElementById("profileName")) document.getElementById("profileName").innerText = "👋 Welcome, " + user.name;
     const today = new Date().toLocaleDateString();
-    document.getElementById("lastLogin").innerText = today;
+    if (document.getElementById("lastLogin")) document.getElementById("lastLogin").innerText = today;
 } else {
-    dashboardName.innerText = "👋 Welcome";
-    document.getElementById("profileName").innerText = "👋 Welcome";
+    if (dashboardName) dashboardName.innerText = "👋 Welcome Student";
+    if (document.getElementById("profileName")) document.getElementById("profileName").innerText = "👋 Welcome";
 }
 
-// Question Counter Setup
 const questionsCount = document.getElementById("questionsCount");
 let totalQuestions = localStorage.getItem("totalQuestions") || 0;
-questionsCount.innerText = totalQuestions;
+if (questionsCount) questionsCount.innerText = totalQuestions;
 
-// Progress Updater
 const progressFill = document.getElementById("progressFill");
 const progressText = document.getElementById("progressText");
 
@@ -331,15 +320,15 @@ function updateProgress(){
     if(progress > 100){
         progress = 100;
     }
-    progressFill.style.width = progress + "%";
-    progressText.innerText = progress + "%";
+    if (progressFill) progressFill.style.width = progress + "%";
+    if (progressText) progressText.innerText = progress + "%";
 }
 updateProgress();
 
-// Badge / Achievements System
 const achievementBadge = document.getElementById("achievementBadge");
 
 function updateAchievement(){
+    if (!achievementBadge) return;
     if(totalQuestions >= 25){
         achievementBadge.innerHTML = "🥇 Study Master";
     }
@@ -354,44 +343,44 @@ function updateAchievement(){
     }
 }
 updateAchievement();
-// XP System Logic
+
 const userLevel = document.getElementById("userLevel");
 const xpText = document.getElementById("xpText");
 
-function updateXP(){
-    let xp = totalQuestions * 10;
-    xpText.innerText = "XP : " + xp;
-    if(xp >= 500){
-        userLevel.innerText = "🏆 Expert";
-    }
-    else if(xp >= 250){
-        userLevel.innerText = "🟣 Advanced";
-    }
-    else if(xp >= 100){
-        userLevel.innerText = "🔵 Intermediate";
-    }
-    else{
-        userLevel.innerText = "🟢 Beginner";
+function updateXP(additionalXP = 0){
+    let xp = (totalQuestions * 10) + additionalXP;
+    if (xpText) xpText.innerText = "XP : " + xp;
+    if (userLevel) {
+        if(xp >= 500){
+            userLevel.innerText = "🏆 Expert";
+        }
+        else if(xp >= 250){
+            userLevel.innerText = "🟣 Advanced";
+        }
+        else if(xp >= 100){
+            userLevel.innerText = "🔵 Intermediate";
+        }
+        else{
+            userLevel.innerText = "🟢 Beginner";
+        }
     }
 }
 updateXP();
 
-// Recent Activity Logger
 const lastQuestion = document.getElementById("lastQuestion");
 const activityStatus = document.getElementById("activityStatus");
 
 function updateRecentActivity(question){
-    lastQuestion.innerText = question;
-    activityStatus.innerText = "✅ Answer Generated";
+    if (lastQuestion) lastQuestion.innerText = question;
+    if (activityStatus) activityStatus.innerText = "✅ Answer Generated";
 }
 
 const savedQuestion = localStorage.getItem("lastQuestion");
 if(savedQuestion){
-    lastQuestion.innerText = savedQuestion;
-    activityStatus.innerText = "✅ Answer Generated";
+    if (lastQuestion) lastQuestion.innerText = savedQuestion;
+    if (activityStatus) activityStatus.innerText = "✅ Answer Generated";
 }
 
-// Daily Goal Tracking
 const goalProgress = document.getElementById("goalProgress");
 const goalFill = document.getElementById("goalFill");
 
@@ -400,28 +389,34 @@ function updateGoal(){
     if(completed > 10){
         completed = 10;
     }
-    goalProgress.innerText = completed + " / 10 Questions Completed";
-    goalFill.style.width = (completed * 10) + "%";
+    if (goalProgress) goalProgress.innerText = completed + " / 10 Questions Completed";
+    if (goalFill) goalFill.style.width = (completed * 10) + "%";
 }
 updateGoal();
 
-// Reset Dashboard Data
 const resetDashboard = document.getElementById("resetDashboard");
-resetDashboard.addEventListener("click", function(){
-    if(confirm("Reset all dashboard progress?")){
-        localStorage.removeItem("totalQuestions");
-        localStorage.removeItem("lastQuestion");
-        totalQuestions = 0;
-        questionsCount.innerText = 0;
-        updateProgress();
-        updateAchievement();
-        updateXP();
-        updateGoal();
-        lastQuestion.innerText = "No question asked yet.";
-        activityStatus.innerText = "⏳ Waiting...";
-        alert("✅ Dashboard Reset Successfully!");
-    }
-});
+if (resetDashboard) {
+    resetDashboard.addEventListener("click", function(){
+        if(confirm("Reset all dashboard progress?")){
+            localStorage.removeItem("totalQuestions");
+            localStorage.removeItem("lastQuestion");
+            localStorage.removeItem("quizStats");
+            totalQuestions = 0;
+            if (questionsCount) questionsCount.innerText = 0;
+            updateProgress();
+            updateAchievement();
+            updateXP();
+            updateGoal();
+            
+            quizStats = { attempts: 0, totalScore: 0, recentQuizzes: [] };
+            renderQuizStatsUI();
+
+            if (lastQuestion) lastQuestion.innerText = "No question asked yet.";
+            if (activityStatus) activityStatus.innerText = "⏳ Waiting...";
+            alert("✅ Dashboard Reset Successfully!");
+        }
+    });
+}
 
 const notesTopic = document.getElementById("notesTopic");
 const generateNotes = document.getElementById("generateNotes");
@@ -432,118 +427,91 @@ const copyNotes = document.getElementById("copyNotes");
 const clearNotes = document.getElementById("clearNotes");
 const downloadNotes = document.getElementById("downloadNotes");
 
-// Generate Notes Click Event
-generateNotes.addEventListener("click", async function(){
-    const loggedIn = localStorage.getItem("isLoggedIn") === "true";
+if (generateNotes) {
+    generateNotes.addEventListener("click", async function(){
+        const loggedIn = localStorage.getItem("isLoggedIn") === "true";
 
-    if (!loggedIn) {
-        if (guestNotes <= 0) {
-            alert("🔒 Please Login for Unlimited Notes.");
-            loginModal.style.display = "flex";
+        if (!loggedIn) {
+            if (guestNotes <= 0) {
+                alert("🔒 Please Login for Unlimited Notes.");
+                loginModal.style.display = "flex";
+                return;
+            }
+            guestNotes--;
+            document.getElementById("guestNotes").innerText = guestNotes;
+        }
+
+        const topic = notesTopic.value.trim().toLowerCase();
+        addToHistory(topic);
+        updateNotesCounter();
+        
+        if (copyNotes) copyNotes.style.display = "none";
+        if (clearNotes) clearNotes.style.display = "inline-block";
+        if (downloadNotes) downloadNotes.style.display = "inline-block";
+
+        if(topic === ""){
+            notesResult.innerHTML = "⚠️ Please enter a topic.";
             return;
         }
-        guestNotes--;
-        document.getElementById("guestNotes").innerText = guestNotes;
-    }
 
-    const topic = notesTopic.value.trim().toLowerCase();
-    addToHistory(topic);
-    updateNotesCounter();
-    
-    copyNotes.style.display = "none";
-    clearNotes.style.display = "inline-block";
-    downloadNotes.style.display = "inline-block";
+        try {
+            notesResult.innerHTML = `
+            <div class="notes-loading">
+            📝 Generating Smart Notes...
+            </div>`;
+            const notes = await askGroqNotes(topic);
+            notesResult.innerHTML = `
+<div class="premium-notes">
+${notes
+.replace(/\*\*(.*?)\*\*/g,"<b>$1</b>")
+.replace(/^# (.*)$/gm,"<h1>$1</h1>")
+.replace(/^## (.*)$/gm,"<h2>$1</h2>")
+.replace(/^### (.*)$/gm,"<h3>$1</h3>")
+.replace(/^- (.*)$/gm,"• $1")
+.replace(/\n/g,"<br>")}
+</div>`;
+            if (copyNotes) copyNotes.style.display = "inline-block";
+            if (clearNotes) clearNotes.style.display = "inline-block";
+            if (downloadNotes) downloadNotes.style.display = "inline-block";
+            return;
+        } 
+        catch (error) {
+            alert("ERROR: " + error.message);
+            console.log(error);
+        }
+    });
+}
 
-    if(topic === ""){
-        notesResult.innerHTML = "⚠️ Please enter a topic.";
-        return;
-    }
+if (copyNotes) {
+    copyNotes.addEventListener("click", function(){
+        navigator.clipboard.writeText(notesResult.innerText);
+        alert("✅ Notes Copied Successfully!");
+    });
+}
 
-    try {
-        notesResult.innerHTML = `
-        <div class="notes-loading">
-        📝 Generating Smart Notes
-        <br><br>
-        <span>●</span><span>●</span><span>●</span>
-        </div>
-        `;
-        const notes = await askGroqNotes(topic);
-        notesResult.innerHTML = notes.replace(/\n/g, "<br>");
-        copyNotes.style.display = "inline-block";
-        clearNotes.style.display = "inline-block";
-        downloadNotes.style.display = "inline-block";
-        return;
-    } 
-    catch (error) {
-        alert("ERROR: " + error.message);
-        console.log(error);
-    }
+if (clearNotes) {
+    clearNotes.addEventListener("click", function(){
+        notesTopic.value = "";
+        notesResult.innerHTML = "Your notes will appear here...";
+        copyNotes.style.display = "none";
+        clearNotes.style.display = "none";
+        downloadNotes.style.display = "none";
+    });
+}
 
-    // Offline hardcoded Notes logic 
-    if(topic.includes("html")){
-        notesResult.innerHTML = `<h3>📚 HTML Notes</h3>• HTML stands for HyperText Markup Language.<br>• HTML is used to create web pages.<br>• HTML uses tags like &lt;h1&gt;, &lt;p&gt;, &lt;img&gt;.<br>• HTML works with CSS and JavaScript.`;
-    }
-    else if(topic.includes("css")){
-        notesResult.innerHTML = `<h3>🎨 CSS Notes</h3>• CSS stands for Cascading Style Sheets.<br>• CSS is used to style web pages.<br>• It controls colors, fonts and layouts.<br>• CSS makes websites attractive.`;
-    }
-    else if(topic.includes("javascript")){
-        notesResult.innerHTML = `<h3>⚡ JavaScript Notes</h3>• JavaScript makes websites interactive.<br>• It handles buttons, forms and animations.<br>• JS works together with HTML and CSS.<br>• It is one of the most popular programming languages.`;
-    }
-    else if(topic.includes("photosynthesis")){
-        notesResult.innerHTML = `<h3>🌿 Photosynthesis Notes</h3>• Plants prepare food using sunlight.<br>• Chlorophyll absorbs light energy.<br>• Carbon dioxide and water are used.<br>• Oxygen is released during the process.`;
-    }
-    else if(topic.includes("biology")){
-        notesResult.innerHTML = `<h3>🧬 Biology Notes</h3>• Biology is the study of living organisms.<br>• It includes plants, animals and microorganisms.<br>• Major branches are Botany, Zoology and Microbiology.<br>• Biology helps us understand life processes.`;
-    }
-    else if(topic.includes("chemistry")){
-        notesResult.innerHTML = `<h3>⚗️ Chemistry Notes</h3>• Chemistry is the study of matter.<br>• It explains atoms, molecules and reactions.<br>• It is divided into Organic, Inorganic and Physical Chemistry.<br>• Chemistry is important in medicine and industries.`;
-    }
-    else if(topic.includes("physics")){
-        notesResult.innerHTML = `<h3>⚡ Physics Notes</h3>• Physics studies matter, energy and motion.<br>• It explains force, gravity and electricity.<br>• Newton's laws are fundamental concepts.<br>• Physics is used in engineering and technology.`;
-    }
-    else if(topic.includes("math")){
-        notesResult.innerHTML = `<h3>➗ Mathematics Notes</h3>• Mathematics studies numbers and patterns.<br>• It includes Algebra, Geometry and Calculus.<br>• Math improves logical thinking.<br>• It is used in science, engineering and finance.`;
-    }
-    else if(topic.includes("python")){
-        notesResult.innerHTML = `<h3>🐍 Python Notes</h3>• Python is an easy programming language.<br>• It is used in AI, Web Development and Automation.<br>• Python has simple syntax.<br>• It is one of the most popular programming languages.`;
-    }
-    else if(topic.includes("artificial intelligence") || topic === "ai"){
-        notesResult.innerHTML = `<h3>🤖 Artificial Intelligence Notes</h3>• AI enables computers to perform intelligent tasks.<br>• AI is used in Chatbots, Robots and Self-driving Cars.<br>• Machine Learning is a branch of AI.<br>• AI is transforming education and healthcare.`;
-    }
-    else {
-        notesResult.innerHTML = `<h3>📖 Notes</h3>Sorry! Notes for this topic are not available yet.<br><br>🚀 When we connect Gemini AI, notes for almost any topic will be generated automatically.`;
-    }
-    copyNotes.style.display = "inline-block"; 
-    clearNotes.style.display = "inline-block"; 
-    downloadNotes.style.display = "inline-block";
-});
+if (downloadNotes) {
+    downloadNotes.addEventListener("click", function(){
+        const text = notesResult.innerText;
+        const blob = new Blob([text], { type: "text/plain" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "StudyBoost_Notes.txt";
+        link.click();
+    });
+}
 
-// Copy Notes Logic
-copyNotes.addEventListener("click", function(){
-    navigator.clipboard.writeText(notesResult.innerText);
-    alert("✅ Notes Copied Successfully!");
-});
-// Clear Notes Logic
-clearNotes.addEventListener("click", function(){
-    notesTopic.value = "";
-    notesResult.innerHTML = "Your notes will appear here...";
-    copyNotes.style.display = "none";
-    clearNotes.style.display = "none";
-    downloadNotes.style.display = "none";
-});
-
-// Download Notes text file link generation
-downloadNotes.addEventListener("click", function(){
-    const text = notesResult.innerText;
-    const blob = new Blob([text], { type: "text/plain" });
-const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "StudyBoost_Notes.txt";
-    link.click();
-});
-
-// Notes History array logic
 function addToHistory(topic){
+    if (!historyList) return;
     let history = JSON.parse(localStorage.getItem("notesHistory")) || [];
     history.unshift(topic);
     history = history.slice(0,5);
@@ -555,142 +523,281 @@ function addToHistory(topic){
 }
 
 const savedHistory = JSON.parse(localStorage.getItem("notesHistory")) || [];
-if(savedHistory.length > 0){
+if(savedHistory.length > 0 && historyList){
     historyList.innerHTML = "";
     savedHistory.forEach(function(item){
         historyList.innerHTML += "<li>📖 " + item + "</li>";
     });
 }
 
-// Notes Counter
 let totalNotes = localStorage.getItem("totalNotes") || 0;
-notesCount.innerText = totalNotes;
+if (notesCount) notesCount.innerText = totalNotes;
 
 function updateNotesCounter(){
     totalNotes++;
     localStorage.setItem("totalNotes", totalNotes);
-    notesCount.innerText = totalNotes;
+    if (notesCount) notesCount.innerText = totalNotes;
 }
 
-const quizTopic = document.getElementById("quizTopic");
-const generateQuiz = document.getElementById("generateQuiz");
-const quizResult = document.getElementById("quizResult");
-const checkQuiz = document.getElementById("checkQuiz");
-const copyQuiz = document.getElementById("copyQuiz");
-const clearQuiz = document.getElementById("clearQuiz");
-const quizCount = document.getElementById("quizCount");
-const quizScore = document.getElementById("quizScore");
-const quizHistoryList = document.getElementById("quizHistoryList");
+// Interactive Quiz Logic
+let currentQuizData = [];
+let userAnswers = {};
 
-// Generate Quiz event listener
-generateQuiz.addEventListener("click", async function(){
-    const loggedIn = localStorage.getItem("isLoggedIn") === "true";
+function escapeHTML(str) {
+    if (!str) return '';
+    return str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
 
-    if (!loggedIn) {
-        if (guestQuiz <= 0) {
-            alert("🔒 Please Login for Unlimited Quiz.");
-            loginModal.style.display = "flex";
-            return;
-        }
-        guestQuiz--;
-        document.getElementById("guestQuiz").innerText = guestQuiz;
-    }
+async function generateQuiz() {
+    const topicInput = document.getElementById('quizTopic');
+    const quizOutput = document.getElementById('quizResult');
+    const topic = topicInput ? topicInput.value.trim() : '';
 
-    const topic = quizTopic.value.trim().toLowerCase();
-    addQuizHistory(topic);
-    copyQuiz.style.display = "none";
-    clearQuiz.style.display = "none";
-    updateQuizCounter();
-    checkQuiz.style.display = "none"; 
-
-    if(topic === ""){
-        quizResult.innerHTML = "⚠️ Please enter a topic.";
+    if (!topic) {
+        alert("Please enter a topic to generate the quiz!");
         return;
     }
+
+    if (quizOutput) {
+        quizOutput.innerHTML = `
+            <div style="text-align:center; padding: 20px;">
+                <p style="font-size: 1.1rem; font-weight: bold;">Generating 10 MCQs for "${escapeHTML(topic)}"... ⏳</p>
+                <p style="color: #666;">Please wait a few seconds!</p>
+            </div>
+        `;
+    }
+
+    const prompt = `Generate a quiz on the topic "${topic}" with strictly 10 multiple-choice questions.
+Respond ONLY with a valid JSON array of objects. Do not include markdown formatting, backticks, or extra commentary.
+
+JSON Format:
+[
+  {
+    "id": 1,
+    "question": "Question text here?",
+    "options": ["A) Option 1", "B) Option 2", "C) Option 3", "D) Option 4"],
+    "correctAnswer": "B"
+  }
+]`;
 
     try {
-        quizResult.innerHTML = `
-        <div class="quiz-loading">
-        📚 Creating AI Quiz
-        <br><br>
-        <span>●</span><span>●</span><span>●</span>
-        </div>
-        `;
-        const quiz = await askGroqQuiz(topic);
-        quizResult.innerHTML = quiz.replace(/\n/g, "<br>");
-        checkQuiz.style.display = "inline-block";
-        copyQuiz.style.display = "inline-block";
-        clearQuiz.style.display = "inline-block";
-        return;
-    } 
-    catch (error) {
-        alert("ERROR: " + error.message);
-        console.log(error);
+        const response = await fetch("https://studyboost-api.mauryaarpit2406.workers.dev", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ question: prompt })
+        });
+
+        if (!response.ok) throw new Error("Server error");
+
+        const data = await response.json();
+        let rawText = data.answer || data.response || data.reply || data.text || JSON.stringify(data);
+
+        const cleanJSON = rawText.replace(/```json/gi, '').replace(/```/g, '').trim();
+        currentQuizData = JSON.parse(cleanJSON);
+        userAnswers = {};
+
+        renderInteractiveQuiz();
+   } catch (error) {
+        console.error("Quiz Error:", error);
+        if (quizOutput) {
+            quizOutput.innerHTML = `
+                <div style="text-align:center; padding: 15px; color: #d32f2f;">
+                    <p style="font-weight: bold;">Failed to generate quiz. Please try again!</p>
+                    <button type="button" style="margin-top:10px; padding:6px 12px; cursor:pointer;" onclick="generateQuiz()">🔄 Retry</button>
+                </div>
+            `;
+        }
     }
-});
-
-// Check Quiz Score Event
-checkQuiz.addEventListener("click", function(){
-    addQuizScore();
-    alert("🎉 Correct Answer!\n\nIn the next update, users will be able to select options and the app will automatically check whether the selected answer is correct.");
-});
-
-// Quiz Count Tracker
-let totalQuiz = localStorage.getItem("totalQuiz") || 0;
-quizCount.innerText = totalQuiz;
-
-function updateQuizCounter(){
-    totalQuiz++;
-    localStorage.setItem("totalQuiz", totalQuiz);
-    quizCount.innerText = totalQuiz;
 }
 
-// Score Calculation Logic
-let totalScore = parseInt(localStorage.getItem("quizScore")) || 0;
-quizScore.innerText = totalScore;
-
-function addQuizScore(){
-    totalScore++;
-    localStorage.setItem("quizScore", totalScore);
-    quizScore.innerText = totalScore;
+const generateQuizBtn = document.getElementById("generateQuiz");
+if (generateQuizBtn) {
+    generateQuizBtn.onclick = generateQuiz;
 }
 
-// Copy Quiz Utility
-copyQuiz.addEventListener("click", function(){
-    navigator.clipboard.writeText(quizResult.innerText);
-    alert("✅ Quiz Copied Successfully!");
-});
+function renderInteractiveQuiz() {
+    const quizOutput = document.getElementById('quizResult');
+    if (!quizOutput) return;
 
-// Clear Quiz Utility
-clearQuiz.addEventListener("click", function(){
-    quizTopic.value = "";
-    quizResult.innerHTML = "Your quiz will appear here...";
-    checkQuiz.style.display = "none";
-    copyQuiz.style.display = "none";
-    clearQuiz.style.display = "none";
-});
+    let html = `
+        <div class="interactive-quiz-wrapper" style="width:100%; display:flex; flex-direction:column; gap:15px; margin-top:15px;">
+    `;
 
-// Quiz History stack update
-function addQuizHistory(topic){
-    let history = JSON.parse(localStorage.getItem("quizHistory")) || [];
-    history.unshift(topic);
-    history = history.slice(0,5);
-    localStorage.setItem("quizHistory", JSON.stringify(history));
-    quizHistoryList.innerHTML = "";
-    history.forEach(function(item){
-        quizHistoryList.innerHTML += "<li>🧠 " + item + "</li>";
+    currentQuizData.forEach((q, qIndex) => {
+        html += `
+            <div class="quiz-card-box" id="q-card-${qIndex}" style="border: 1px solid #ddd; border-radius: 8px; padding: 12px; background: #fff; text-align: left;">
+                <h4 class="q-title" style="margin-top:0; color:#2e7d32; font-size:1rem;">${qIndex + 1}. ${escapeHTML(q.question)}</h4>
+                <div class="options-container" style="display:flex; flex-direction:column; gap:6px;">
+        `;
+
+        q.options.forEach((opt) => {
+            const letter = opt.trim().charAt(0).toUpperCase();
+            html += `
+                <button type="button" 
+                        class="quiz-opt-btn opt-btn-${qIndex}" 
+                        style="text-align:left; padding:8px 12px; border:1px solid #ccc; background:#f9f9f9; border-radius:6px; cursor:pointer; width:100%; font-size:0.9rem;"
+                        onclick="selectQuizOption(${qIndex}, '${letter}', this)">
+                    ${escapeHTML(opt)}
+                </button>
+            `;
+        });
+
+        html += `
+                </div>
+                <div class="q-feedback" id="feedback-${qIndex}" style="display:none; margin-top:8px; padding:6px; border-radius:4px; font-size:0.85rem;"></div>
+            </div>
+        `;
     });
+
+    html += `
+        <div style="display:flex; gap:10px; margin-top:10px; justify-content:center;">
+            <button id="submitQuizBtn" type="button" style="background:#2196F3; color:white; border:none; padding:10px 20px; border-radius:6px; font-weight:bold; cursor:pointer;" onclick="submitInteractiveQuiz()">✅ Submit & Check Answers</button>
+            <button type="button" style="background:#757575; color:white; border:none; padding:10px 15px; border-radius:6px; cursor:pointer;" onclick="resetQuizInput()">🗑️ Clear</button>
+        </div>
+        <div id="quizScoreResult" style="margin-top:10px;"></div>
+    </div>`;
+
+    quizOutput.innerHTML = html;
 }
 
-const savedQuizHistory = JSON.parse(localStorage.getItem("quizHistory")) || [];
-if(savedQuizHistory.length > 0){
-    quizHistoryList.innerHTML = "";
-    savedQuizHistory.forEach(function(item){
-        quizHistoryList.innerHTML += "<li>🧠 " + item + "</li>";
+function selectQuizOption(qIndex, letter, btnElement) {
+    userAnswers[qIndex] = letter;
+
+    const buttons = document.querySelectorAll(`.opt-btn-${qIndex}`);
+    buttons.forEach(btn => {
+        btn.style.background = '#f9f9f9';
+        btn.style.borderColor = '#ccc';
+        btn.style.fontWeight = 'normal';
     });
+    
+    btnElement.style.background = '#e3f2fd';
+    btnElement.style.borderColor = '#2196F3';
+    btnElement.style.fontWeight = 'bold';
 }
 
-// Guest limitations metrics initialization
+let quizStats = JSON.parse(localStorage.getItem('quizStats')) || {
+    attempts: 0,
+    totalScore: 0,
+    recentQuizzes: []
+};
+
+function renderQuizStatsUI() {
+    const quizCountEl = document.getElementById('quizCount');
+    if (quizCountEl) quizCountEl.innerText = quizStats.attempts;
+
+    const quizScoreEl = document.getElementById('quizScore');
+    if (quizScoreEl) quizScoreEl.innerText = quizStats.totalScore;
+
+    const quizHistoryEl = document.getElementById('quizHistoryList');
+    if (quizHistoryEl) {
+        if (quizStats.recentQuizzes.length === 0) {
+            quizHistoryEl.innerHTML = `<li>No quizzes yet</li>`;
+        } else {
+            let html = '';
+            quizStats.recentQuizzes.forEach(item => {
+                html += `
+                    <li style="margin-bottom: 5px;">
+                        📌 <strong>${escapeHTML(item.topic)}</strong>: ${item.score}/${item.total} pts
+                    </li>
+                `;
+            });
+            quizHistoryEl.innerHTML = html;
+        }
+    }
+}
+
+function submitInteractiveQuiz() {
+    let score = 0;
+
+    currentQuizData.forEach((q, qIndex) => {
+        const userAns = userAnswers[qIndex];
+        const correctAns = q.correctAnswer.trim().toUpperCase();
+        const feedbackDiv = document.getElementById(`feedback-${qIndex}`);
+        const buttons = document.querySelectorAll(`.opt-btn-${qIndex}`);
+
+        buttons.forEach(btn => {
+            btn.disabled = true;
+            btn.style.cursor = 'default';
+            
+            const btnText = btn.innerText.trim();
+            const btnLetter = btnText.charAt(0).toUpperCase();
+
+            if (btnLetter === correctAns) {
+                btn.style.background = '#d4edda';
+                btn.style.borderColor = '#28a745';
+                btn.style.color = '#155724';
+                btn.style.fontWeight = 'bold';
+            }
+            if (userAns && btnLetter === userAns && userAns !== correctAns) {
+                btn.style.background = '#f8d7da';
+                btn.style.borderColor = '#dc3545';
+                btn.style.color = '#721c24';
+            }
+        });
+if (feedbackDiv) {
+            if (userAns === correctAns) {
+                score++;
+                feedbackDiv.style.background = '#e8f5e9';
+                feedbackDiv.innerHTML = `<span style="color: #2e7d32; font-weight:bold;">✔ Correct Answer!</span>`;
+            } else {
+                feedbackDiv.style.background = '#ffebee';
+                feedbackDiv.innerHTML = `<span style="color: #c62828; font-weight:bold;">❌ Incorrect! Correct Answer is: Option ${correctAns}</span>`;
+            }
+            feedbackDiv.style.display = 'block';
+        }
+    });
+
+    const topicInput = document.getElementById('quizTopic');
+    const topicName = topicInput && topicInput.value.trim() ? topicInput.value.trim() : 'General Quiz';
+
+    quizStats.attempts += 1;
+    quizStats.totalScore += score;
+    quizStats.recentQuizzes.unshift({
+        topic: topicName,
+        score: score,
+        total: currentQuizData.length
+    });
+
+    if (quizStats.recentQuizzes.length > 5) {
+        quizStats.recentQuizzes.pop();
+    }
+
+    localStorage.setItem('quizStats', JSON.stringify(quizStats));
+    renderQuizStatsUI();
+
+    const resultDiv = document.getElementById('quizScoreResult');
+    if (resultDiv) {
+        resultDiv.innerHTML = `
+            <div style="text-align:center; padding:15px; background:#f0f4c3; border-radius:8px; border:1px solid #c0ca33;">
+                <h3 style="margin:0 0 8px 0; color:#33691e;">🎉 Score: ${score} / ${currentQuizData.length}</h3>
+                <button type="button" style="padding:6px 12px; border:none; background:#3949ab; color:white; border-radius:4px; cursor:pointer;" onclick="resetQuizInput()">✨ Next Quiz</button>
+            </div>
+        `;
+    }
+
+    const submitBtn = document.getElementById('submitQuizBtn');
+    if (submitBtn) submitBtn.style.display = 'none';
+
+    updateXP(score * 10);
+}
+
+document.addEventListener('DOMContentLoaded', renderQuizStatsUI);
+renderQuizStatsUI();
+
+function resetQuizInput() {
+    currentQuizData = [];
+    userAnswers = {};
+    const topicInput = document.getElementById('quizTopic');
+    if (topicInput) topicInput.value = '';
+    const quizOutput = document.getElementById('quizResult');
+    if (quizOutput) quizOutput.innerHTML = 'Your quiz will appear here...';
+}
+
 let guestAI = 3;
 let guestNotes = 2;
 let guestQuiz = 1;
@@ -706,7 +813,7 @@ const studentMode = document.getElementById("studentMode");
 let isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
 let currentUser = "Guest";
 
-// Theme Switcher Module (Dark / Light Mode Toggle)
+// Theme Switcher
 const themeToggle = document.getElementById("themeToggle");
 if (themeToggle) {
     themeToggle.onclick = function(){
@@ -725,228 +832,134 @@ if(localStorage.getItem("theme") === "dark"){
     document.body.classList.add("dark-mode");
     if (themeToggle) themeToggle.innerText = "☀️ Light Mode";
 }
-
+// Get Started Landing Button
 const getStartedBtn = document.getElementById("getStartedBtn");
 if(getStartedBtn){
-    getStartedBtn.addEventListener("click",function(){
-        document.querySelector("header").style.display="none";
-        document.getElementById("guestBanner").style.display="none";
-        document.getElementById("guestCard").style.display="none";
-        document.getElementById("landingPage").style.display="none";
-        document.getElementById("appHome").style.display="block";
-        document.querySelector(".features").style.display = "none";
-        document.querySelector(".about").style.display = "none";
-        document.querySelector(".contact").style.display = "none";
-        document.getElementById("ai-section").style.display = "block";
-        document.getElementById("vision-section").style.display = "block";
-        document.getElementById("notes-section").style.display = "block";
-        document.getElementById("quiz-section").style.display = "block";
-        document.getElementById("planner-section").style.display = "block";
-const aiPlanner = document.getElementById("planner-ai-section");
-
-if (aiPlanner) {
-    aiPlanner.style.display = "block";
-}
+    getStartedBtn.addEventListener("click", function(){
+        // Header/Navbar hide karna hai App Dashboard me
+        if(document.querySelector("header")) document.querySelector("header").style.display="none";
+        
+        if(document.getElementById("guestBanner")) document.getElementById("guestBanner").style.display="none";
+        if(document.getElementById("guestCard")) document.getElementById("guestCard").style.display="none";
+        if(document.getElementById("landingPage")) document.getElementById("landingPage").style.display="none";
+        if(document.getElementById("appHome")) document.getElementById("appHome").style.display="block";
+        if(document.querySelector(".hero")) document.querySelector(".hero").style.display = "none";
+        if(document.querySelector(".features")) document.querySelector(".features").style.display = "none";
+        if(document.querySelector(".about")) document.querySelector(".about").style.display = "none";
+        if(document.querySelector(".contact")) document.querySelector(".contact").style.display = "none";
+        
         window.scrollTo(0,0);
     });
 }
-// ========= APP HOME FEATURES =========
-document.getElementById("openAI")?.addEventListener("click", function () {
-    document.getElementById("ai-section").scrollIntoView({ behavior: "smooth" });
-});
-document.getElementById("openNotes")?.addEventListener("click", function () {
-    document.getElementById("notes-section").scrollIntoView({ behavior: "smooth" });
-});
-document.getElementById("openQuiz")?.addEventListener("click", function () {
-    document.getElementById("quiz-section").scrollIntoView({ behavior: "smooth" });
-});
-document.getElementById("openPlanner")?.addEventListener("click", function () {
-    document.querySelector(".planner-ai-section").scrollIntoView({ behavior: "smooth" });
-});
+// ==========================================
+// 🚀 NAVIGATION FIXED (DIRECT SCROLL & SHOW)
+// ==========================================
+function goToFeatureSection(sectionId) {
+    // Header ko app view me hidden hi rakhna hai
+    const header = document.querySelector("header");
+    if (header) header.style.display = "none";
 
-// ===== APP HOME BUTTONS =====
+    const sec = document.getElementById(sectionId);
+    if (sec) {
+        sec.style.display = "block";
+        sec.scrollIntoView({ behavior: "smooth" });
+    }
+}
 document.getElementById("goAI")?.addEventListener("click", function () {
-    document.getElementById("ai-section").scrollIntoView({ behavior: "smooth" });
+    goToFeatureSection("ai-section");
 });
 document.getElementById("goNotes")?.addEventListener("click", function () {
-    document.getElementById("notes-section").scrollIntoView({ behavior: "smooth" });
+    goToFeatureSection("notes-section");
 });
 document.getElementById("goQuiz")?.addEventListener("click", function () {
-    document.getElementById("quiz-section").scrollIntoView({ behavior: "smooth" });
+    goToFeatureSection("quiz-section");
 });
 document.getElementById("goPlanner")?.addEventListener("click", function () {
-    document.querySelector(".planner-ai-section").scrollIntoView({ behavior: "smooth" });
+    goToFeatureSection("planner-section");
+});
+document.getElementById("goVision")?.addEventListener("click", function () {
+    goToFeatureSection("vision-section");
 });
 document.getElementById("goAIPlanner")?.addEventListener("click", function () {
-    document.getElementById("planner-ai-section").scrollIntoView({
-        behavior: "smooth"
-    });
+    goToFeatureSection("planner-ai-section");
 });
 document.getElementById("appLogin")?.addEventListener("click", function () {
-    if (typeof loginModal !== 'undefined') {
-        loginModal.style.display = "flex";
-    }
+    if (loginModal) loginModal.style.display = "flex";
 });
 
-// ================= STUDY PLANNER =================
+// Study Planner
 const plannerTask = document.getElementById("plannerTask");
 const addTask = document.getElementById("addTask");
 const progressPercent = document.getElementById("progressPercent");
 const plannerList = document.getElementById("plannerList");
-// ===============================
-// PLANNER MANAGER
-// ===============================
 
 let tasks = [];
 
 function loadTasks() {
-
-    const saved =
-        localStorage.getItem("studyPlanner");
-
-    if (saved) {
-
-        tasks = JSON.parse(saved);
-
-    } else {
-
-        tasks = [];
-
-    }
-
+    const saved = localStorage.getItem("studyPlanner");
+    tasks = saved ? JSON.parse(saved) : [];
 }
 
 function saveTasks() {
-
-    localStorage.setItem(
-        "studyPlanner",
-        JSON.stringify(tasks)
-    );
-
+    localStorage.setItem("studyPlanner", JSON.stringify(tasks));
 }
-function getRemainingTime(task){
 
-    const now = new Date();
-
-    const alarm = new Date(task.date + "T" + task.time);
-
-    const diff = alarm - now;
-
-    if(diff <= 0){
-        return "🔔 Time Passed";
-    }
-
-    const hours = Math.floor(diff / (1000 * 60 * 60));
-    const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-
-    if(hours > 0){
-        return `⏳ ${hours}h ${mins}m left`;
-    }
-
-    return `⏳ ${mins}m left`;
-}
 function renderTasks(){
+    if (!plannerList) return;
     plannerList.innerHTML = "";
     tasks.forEach(function(task,index){
         plannerList.innerHTML += `
 <li class="${task.completed ? "taskDone" : ""}">
-   <strong class="${
-    task.completed ? "completedTask" : ""
-}">
-    ${task.text}
-</strong> <br>
-    📅 ${task.date} &nbsp; ⏰ ${task.time}
-    <br>
-🔔 ${
-    task.notified
-        ? "Completed"
-        : "Active"
-}
-<br>
-${getRemainingTime(task)}
-<br>
-    🔁 ${task.repeat}
-    <br><br>
+    <strong>${task.text}</strong><br>
+    📅 ${task.date} &nbsp; ⏰ ${task.time} <br>
     <button onclick="completeTask(${index})">✅</button>
     <button onclick="deleteTask(${index})">🗑</button>
-</li>
-`;
+</li>`;
     });
 
-    let completed = 0;
-    tasks.forEach(function(task){
-        if(task.completed){
-    completed++;
+    let completed = tasks.filter(t => t.completed).length;
+    let percent = tasks.length > 0 ? Math.round((completed / tasks.length) * 100) : 0;
+    if (progressPercent) progressPercent.innerText = "📊 Progress: " + percent + "%";
 }
-    });
 
-    let percent = 0;
-    if(tasks.length > 0){
-        percent = Math.round((completed / tasks.length) * 100);
-    }
-    progressPercent.innerText = "📊 Progress : " + percent + "%";
-}
 loadTasks();
 renderTasks();
 
-// Add Task
 if (addTask) {
     addTask.addEventListener("click", function(){
         const task = plannerTask.value.trim();
-        const taskDate = document.getElementById("taskDate").value;
-        const taskTime = document.getElementById("plannerTaskTime").value;
+        const taskDate = document.getElementById("taskDate")?.value || "";
+        const taskTime = document.getElementById("plannerTaskTime")?.value || "";
 
         if(task === ""){
             alert("⚠️ Please enter a study task.");
             return;
         }
-tasks.push({
-    text: task,
-    date: taskDate,
-    time: taskTime,
-    repeat: document.getElementById("repeatTask").value,
-    completed: false,
-    notified: false
-});
+        tasks.push({
+            text: task,
+            date: taskDate,
+            time: taskTime,
+            completed: false
+        });
         
-        if(taskTime !== ""){
-            alert("🔔 Reminder Set For : " + taskTime);
-        }
-        localStorage.setItem("studyPlanner", JSON.stringify(tasks));
+        saveTasks();
         plannerTask.value = "";
         renderTasks();
     });
 }
+
 function completeTask(index){
-
     tasks[index].completed = !tasks[index].completed;
-
-    saveTasks(tasks);
-
+    saveTasks();
     renderTasks();
-
 }
 
 function deleteTask(index){
     tasks.splice(index,1);
-    localStorage.setItem("studyPlanner", JSON.stringify(tasks));
+    saveTasks();
     renderTasks();
 }
-
-const plannerDate = document.getElementById("plannerDate");
-if(plannerDate){
-    const today = new Date();
-    plannerDate.innerText = "📅 Today : " + today.toDateString();
-}
-
-async function askGroqPlanner(prompt){
-    return await askGroq(
-        "Create a day-wise study plan for this goal: " +
-        prompt +
-        ". Give proper Day 1, Day 2, Day 3 format with bullet points."
-    );
-}
-
+// AI Study Planner
 const plannerPrompt = document.getElementById("plannerPrompt");
 const generatePlanner = document.getElementById("generatePlanner");
 const plannerResult = document.getElementById("plannerResult");
@@ -963,449 +976,116 @@ if (generatePlanner) {
 
         plannerResult.innerHTML = "🤖 AI is creating your study plan...";
         try{
-            const plan = await askGroqPlanner(prompt);
+            const plan = await askGroq("Create a day-wise study plan for: " + prompt);
             plannerResult.innerHTML = plan.replace(/\n/g,"<br>");
-            copyPlanner.style.display = "inline-block";
-            clearPlanner.style.display = "inline-block";
+            if (copyPlanner) copyPlanner.style.display = "inline-block";
+            if (clearPlanner) clearPlanner.style.display = "inline-block";
         }
         catch(error){
             plannerResult.innerHTML = "❌ Failed to generate study plan.";
-            console.log(error);
         }
     });
 }
 
-// ===== AI Planner Copy =====
 copyPlanner?.addEventListener("click", function () {
     navigator.clipboard.writeText(plannerResult.innerText);
     alert("✅ AI Study Plan Copied!");
 });
 
-// ===== AI Planner Clear =====
 clearPlanner?.addEventListener("click", function () {
-    plannerPrompt.value = "";
-    plannerResult.innerHTML = "Your AI Study Plan will appear here...";
-    copyPlanner.style.display = "none";
-    clearPlanner.style.display = "none";
+    if (plannerPrompt) plannerPrompt.value = "";
+    if (plannerResult) plannerResult.innerHTML = "Your AI Study Plan will appear here...";
+    if (copyPlanner) copyPlanner.style.display = "none";
+    if (clearPlanner) clearPlanner.style.display = "none";
 });
-
 const backLanding = document.getElementById("backLanding");
 if (backLanding) {
     backLanding.addEventListener("click", function () {
-        document.getElementById("appHome").style.display = "none";
-        document.querySelector(".hero").style.display = "block";
-        document.querySelector(".features").style.display = "block";
-        document.querySelector(".about").style.display = "block";
-        document.querySelector(".contact").style.display = "block";
-        document.getElementById("guestBanner").style.display = "block";
-        document.getElementById("guestCard").style.display = "block";
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-        });
+        // Landing page par wapas Header show kar do
+        if(document.querySelector("header")) document.querySelector("header").style.display = "block";
+        if(document.getElementById("appHome")) document.getElementById("appHome").style.display = "none";
+        if(document.querySelector(".hero")) document.querySelector(".hero").style.display = "block";
+        if(document.querySelector(".features")) document.querySelector(".features").style.display = "block";
+        if(document.querySelector(".about")) document.querySelector(".about").style.display = "block";
+        if(document.querySelector(".contact")) document.querySelector(".contact").style.display = "block";
+        window.scrollTo({ top: 0, behavior: "smooth" });
     });
 }
-// ================= AI VISION STUDIO =================
-
-const VISION_API =
-"https://studyboost-vision.mauryaarpit2406.workers.dev/";
-
-let currentVisionPrompt =
-"Describe this image in detail.";
-
+// AI Vision Studio
+const VISION_API = "https://studyboost-vision.mauryaarpit2406.workers.dev/";
+let currentVisionPrompt = "Describe this image in detail.";
 let selectedVisionImage = null;
 
-// Elements
+const visionCameraBtn = document.getElementById("visionCameraBtn");
+const visionGalleryBtn = document.getElementById("visionGalleryBtn");
+const visionImage = document.getElementById("visionImage");
+const visionPreview = document.getElementById("visionPreview");
+const visionActions = document.getElementById("visionActions");
+const visionHeading = document.getElementById("visionHeading");
+const visionResult = document.getElementById("visionResult");
 
-const visionCameraBtn =
-document.getElementById("visionCameraBtn");
-
-const visionGalleryBtn =
-document.getElementById("visionGalleryBtn");
-
-const visionImage =
-document.getElementById("visionImage");
-
-const visionPreview =
-document.getElementById("visionPreview");
-
-const visionActions =
-document.getElementById("visionActions");
-
-const visionHeading =
-document.getElementById("visionHeading");
-
-const visionResult =
-document.getElementById("visionResult");
-
-// ================= Camera =================
-
-visionCameraBtn.addEventListener("click", () => {
-
-    visionImage.setAttribute(
-        "capture",
-        "environment"
-    );
-
-    visionImage.click();
-
-});
-
-// ================= Gallery =================
-
-visionGalleryBtn.addEventListener("click", () => {
-
-    visionImage.removeAttribute("capture");
-
-    visionImage.click();
-
-});
-// ================= AI BUTTONS =================
-
-// 🧠 Solve Doubt
-
-document.getElementById("visionSolve").addEventListener("click", () => {
-
-    currentVisionPrompt = `
-You are StudyBoost Hub AI.
-
-Read the question from the image carefully.
-
-Rules:
-- Do NOT describe the image.
-- Solve the question directly.
-- Explain in simple student-friendly language.
-- Use headings and bullet points.
-- End with a memory trick.
-`;
-
-    if (selectedVisionImage) {
-        sendVisionRequest();
-    } else {
+if (visionCameraBtn && visionImage) {
+    visionCameraBtn.addEventListener("click", () => {
+        visionImage.setAttribute("capture", "environment");
         visionImage.click();
-    }
+    });
+}
 
-});
-
-// 📝 Generate Notes
-
-document.getElementById("visionGenerateNotes").addEventListener("click", () => {
-
-    currentVisionPrompt = `
-Read the study material from this image.
-
-Generate:
-- Beautiful notes
-- Headings
-- Bullet points
-- Important keywords
-- Easy explanation
-- Quick revision summary
-`;
-
-    if (selectedVisionImage) {
-        sendVisionRequest();
-    } else {
+if (visionGalleryBtn && visionImage) {
+    visionGalleryBtn.addEventListener("click", () => {
+        visionImage.removeAttribute("capture");
         visionImage.click();
-    }
+    });
+}
 
+document.getElementById("visionSolve")?.addEventListener("click", () => {
+    currentVisionPrompt = "Solve the question from the image directly.";
+    selectedVisionImage ? sendVisionRequest() : visionImage?.click();
 });
 
-// 📚 Generate Project
-
-document.getElementById("visionGenerateProject").addEventListener("click", () => {
-
-    currentVisionPrompt = `
-Read the topic from the image.
-
-Generate a complete school project.
-
-Include:
-- Title
-- Introduction
-- Objectives
-- Explanation
-- Conclusion
-- Viva Questions
-`;
-
-    if (selectedVisionImage) {
-        sendVisionRequest();
-    } else {
-        visionImage.click();
-    }
-
+document.getElementById("visionGenerateNotes")?.addEventListener("click", () => {
+    currentVisionPrompt = "Generate study notes from this image.";
+    selectedVisionImage ? sendVisionRequest() : visionImage?.click();
 });
 
-// 📊 Generate Chart
+if (visionImage) {
+    visionImage.addEventListener("change", function () {
+        const file = this.files[0];
+        if (!file) return;
 
-document.getElementById("visionGenerateChart").addEventListener("click", () => {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            selectedVisionImage = e.target.result;
+            if (visionActions) visionActions.style.display = "flex";
+            if (visionHeading) visionHeading.style.display = "block";
+            if (visionResult) visionResult.style.display = "block";
 
-    currentVisionPrompt = `
-Read the data/topic from the image.
-
-Create a clean chart from the information.
-
-Rules:
-- Do NOT describe the image.
-- Do NOT explain the topic.
-- Return ONLY a Markdown table.
-- Use proper columns and rows.
-- Keep the table neat and easy to read.
-`;
-
-
-
-    if (selectedVisionImage) {
-        sendVisionRequest();
-    } else {
-        visionImage.click();
-    }
-
-});
-
-// ❓ Generate Quiz
-
-document.getElementById("visionGenerateQuiz").addEventListener("click", () => {
-
-    currentVisionPrompt = `
-Read the image carefully.
-Generate a student-friendly quiz.
-
-Rules:
-
-- Create 5 MCQs.
-- Each question should have 4 options.
-- Put every option on a NEW LINE.
-
-Example:
-
-1. What is Orbit?
-
-A. Option One
-
-B. Option Two
-
-C. Option Three
-
-D. Option Four
-
-✅ Correct Answer: B
-
-Repeat the same format for all questions.
-
-Do NOT keep options in one line.
-Use proper spacing between questions.
-`;
-
-    if (selectedVisionImage) {
-        sendVisionRequest();
-    } else {
-        visionImage.click();
-    }
-
-});
-// ================= IMAGE UPLOAD =================
-
-visionImage.addEventListener("change", function () {
-
-    const file = this.files[0];
-
-    if (!file) return;
-
-    const reader = new FileReader();
-
-    reader.onload = function (e) {
-
-        selectedVisionImage = e.target.result;
-
-        visionActions.style.display = "grid";
-        visionHeading.style.display = "block";
-        visionResult.style.display = "block";
-
-        visionPreview.innerHTML = `
-            <img
-                src="${selectedVisionImage}"
-                style="
-                    width:100%;
-                    max-height:300px;
-                    object-fit:cover;
-                    border-radius:12px;
-                ">
-        `;
-
-        sendVisionRequest();
-
-    };
-
-    reader.readAsDataURL(file);
-
-});
-
-// ================= SEND REQUEST =================
+            if (visionPreview) {
+                visionPreview.innerHTML = `<img src="${selectedVisionImage}" style="width:100%; max-height:250px; object-fit:cover; border-radius:8px;">`;
+            }
+            sendVisionRequest();
+        };
+        reader.readAsDataURL(file);
+    });
+}
 
 function sendVisionRequest() {
-
     if (!selectedVisionImage) return;
-
-    visionResult.innerHTML = "🤖 AI is analyzing image...";
+    if (visionResult) visionResult.innerHTML = "🤖 AI is analyzing image...";
 
     fetch(VISION_API, {
-
         method: "POST",
-
-        headers: {
-            "Content-Type": "application/json"
-        },
-
-        body: JSON.stringify({
-
-            prompt: currentVisionPrompt,
-
-            image: selectedVisionImage
-
-        })
-
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: currentVisionPrompt, image: selectedVisionImage })
     })
-
     .then(res => res.json())
-
     .then(data => {
-
-        console.log(data);
-
-        if (data.error) {
-
-            visionResult.innerHTML =
-            "❌ " + data.error;
-
-            return;
-
+        const answer = data.choices?.[0]?.message?.content || "❌ No response received.";
+        if (visionResult) {
+            visionResult.innerHTML = (typeof marked !== "undefined") ? marked.parse(answer) : answer;
         }
-
-        const answer =
-        data.choices?.[0]?.message?.content ||
-        "❌ No response received.";
-
-        visionResult.innerHTML =
-        marked.parse(answer);
-
     })
-
-    .catch(err => {
-
-        console.log(err);
-
-        visionResult.innerHTML =
-        "❌ Vision Failed";
-
+    .catch(() => {
+        if (visionResult) visionResult.innerHTML = "❌ Vision Request Failed";
     });
-
 }
-// ================= GO TO VISION =================
-
-document.getElementById("goVision")?.addEventListener("click", () => {
-
-    document.getElementById("vision-section").scrollIntoView({
-
-        behavior: "smooth"
-
-    });
-
-});
-
-// ================= RESET IMAGE =================
-
-function resetVision() {
-
-    selectedVisionImage = null;
-
-    visionImage.value = "";
-
-}
-
-// ================= READY =================
-
-console.log("✅ StudyBoost Hub AI Vision v2 Loaded");
-// ===============================
-// STUDY PLANNER NOTIFICATION
-// ===============================
-
-if ("Notification" in window) {
-
-    if (Notification.permission !== "granted") {
-
-        Notification.requestPermission().then(permission => {
-
-            console.log("Notification Permission:", permission);
-
-        });
-
-    }
-}
-document.getElementById("testAlarm")?.addEventListener("click", () => {
-
-    alert("🔔 Alarm System Ready!");
-    
-
-});
-
-// ================= REAL ALARM ENGINE =================
-
-setInterval(function () {
-
-    const now = new Date();
-
-    const currentDate = now.toISOString().split("T")[0];
-
-    const currentTime =
-        String(now.getHours()).padStart(2, "0") +
-        ":" +
-        String(now.getMinutes()).padStart(2, "0");
-
-    tasks.forEach(function (task, index) {
-
-        if (task.completed) return;
-
-        if (task.notified) return;
-
-       if (
-    task.date === currentDate &&
-    task.time === currentTime
-) {
-console.log("Alarm Triggered");   plannerAlarm.pause();
-
-plannerAlarm.currentTime = 0;
-console.log(task.date, currentDate);
-console.log(task.time, currentTime);
-plannerAlarm.play().then(() => {
-    console.log("✅ Alarm Playing");
-}).catch((err) => {
-    console.log("❌ Alarm Error :", err);
-});
-
-            if (navigator.vibrate) {
-                navigator.vibrate([500,300,500]);
-            }
-
-            alert(
-                "🔔 Study Reminder!\n\n" +
-                task.text
-            );
-
-            task.notified = true;
-saveTasks(tasks);
-        }
-
-    });
-
-}, 1000);
-// ===============================
-// LIVE PLANNER REFRESH
-// ===============================
-
-setInterval(function(){
-
-    renderTasks();
-
-},60000);
